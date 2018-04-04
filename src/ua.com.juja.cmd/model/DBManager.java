@@ -14,4 +14,6 @@ public interface DBManager {
     void getDataSet();
 
     String getTablesNames();
+
+    boolean isConnected();
 }

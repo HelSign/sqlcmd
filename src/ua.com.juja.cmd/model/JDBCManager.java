@@ -21,9 +21,9 @@ public class JDBCManager implements DBManager {
     }
 
     public JDBCManager() {
-        user = "postgres";
+      /*  user = "postgres";
         password = "postgres";
-        dbName = "sqlcmd";
+        dbName = "sqlcmd";*/
         url = "jdbc:postgresql://127.0.0.1:5432/";
     }
 
@@ -91,5 +91,12 @@ public class JDBCManager implements DBManager {
     @Override
     public String getTablesNames() {
         return "";
+    }
+
+    @Override
+    public boolean isConnected() {
+        if (connection != null)
+            return true;
+        else return false;
     }
 }
