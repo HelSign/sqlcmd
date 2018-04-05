@@ -1,15 +1,12 @@
 package ua.com.juja.cmd.model;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class JDBCManager implements DBManager {
     private Connection connection;
     private String user;
     private String password;
-    private String url;
+    private String url = "jdbc:postgresql://127.0.0.1:5432/";
     private String dbName;
 
     public void setPassword(String password) {
@@ -18,13 +15,6 @@ public class JDBCManager implements DBManager {
 
     public void setUser(String user) {
         this.user = user;
-    }
-
-    public JDBCManager() {
-      /*  user = "postgres";
-        password = "postgres";
-        dbName = "sqlcmd";*/
-        url = "jdbc:postgresql://127.0.0.1:5432/";
     }
 
     @Override
@@ -54,6 +44,22 @@ public class JDBCManager implements DBManager {
         }
     }
 
+    @Override
+    public void createTable(String name, String[] columns) {
+        String query = "CREATE TABLE " + name + " (";
+        for (String col : columns) {
+            query += col + " varchar(40),";
+        }
+        query = query.substring(0, query.length() - 2) + ")";//to remove last comma sign
+
+        try (Statement stmt = connection.createStatement()) {
+            stmt.execute(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     private boolean closeConnection() {
         if (connection != null) {
             try {
@@ -77,11 +83,23 @@ public class JDBCManager implements DBManager {
     }
 
     @Override
-    public void deleteRows() {
+    public void deleteRows(String table) {
+        String query = "TRUNCATE TABLE public." + table;
+        try (Statement st = connection.createStatement()) {
+            st.execute(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void dropTable() {
+    public void dropTable(String table) {
+        String query = "DROP TABLE public." + table;
+        try (Statement st = connection.createStatement()) {
+            st.execute(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -90,13 +108,21 @@ public class JDBCManager implements DBManager {
 
     @Override
     public String getTablesNames() {
-        return "";
+        String query = "SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE'";
+        String result = "";
+        try (Statement st = connection.createStatement();
+             ResultSet rs = st.executeQuery(query)) {
+            while (rs.next()) {
+                result += rs.getString("table_name") + ",";
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     @Override
     public boolean isConnected() {
-        if (connection != null)
-            return true;
-        else return false;
+        return (connection != null);
     }
 }

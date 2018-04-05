@@ -5,16 +5,19 @@ import ua.com.juja.cmd.model.DBManager;
 import ua.com.juja.cmd.view.View;
 
 public class Controller {
-    private DBManager dbManager;
+    //private DBManager dbManager;
     private View view;
     private Command[] commands;
 
     public Controller(DBManager dbManager, View view) {
-        this.dbManager = dbManager;
+      //  this.dbManager = dbManager;
         this.view = view;
         this.commands = new Command[]{
                 new Help(view),
                 new ConnectDB(view, dbManager),
+                new Create(view,dbManager),
+                new Drop(view,dbManager),
+                new Tables(view,dbManager),
                 new Exit(view)};
     }
 
@@ -24,7 +27,7 @@ public class Controller {
         try {
             while (true) {
                 try {
-                    String input = view.read();
+                    String input = view.read().trim();
                     for (Command command : commands) {
                         if (command.isExecutable(input)) {
                             command.execute(input);

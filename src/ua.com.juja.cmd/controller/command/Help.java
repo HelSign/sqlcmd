@@ -4,6 +4,7 @@ import ua.com.juja.cmd.view.View;
 
 public class Help implements Command {
     private View view;
+    final static public String COMMAND = "help";
 
     public Help(View view) {
         this.view = view;
@@ -11,7 +12,7 @@ public class Help implements Command {
 
     @Override
     public boolean isExecutable(String command) {
-        return command.startsWith("help");
+        return command.startsWith(COMMAND);
     }
 
     @Override

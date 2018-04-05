@@ -1,15 +1,18 @@
 package ua.com.juja.cmd.model;
 
 public interface DBManager {
+
     void makeConnection(String dbName, String user, String password);
+
+    void createTable(String name, String[]columns);
 
     void insertRows();
 
     void updateRows();
 
-    void deleteRows();
+    void deleteRows(String table);
 
-    void dropTable();
+    void dropTable(String table);
 
     void getDataSet();
 

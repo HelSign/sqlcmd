@@ -1,13 +1,17 @@
 package ua.com.juja.cmd.controller.command;
 
+import ua.com.juja.cmd.model.DBManager;
 import ua.com.juja.cmd.view.View;
 
-public class Exit implements Command {
+public class Tables implements Command {
     private View view;
-    final static public String COMMAND = "exit";
+    private DBManager dbManager;
 
-    public Exit(View view) {
+    final static public String COMMAND = "tables";
+
+    public Tables(View view, DBManager dbManager) {
         this.view = view;
+        this.dbManager = dbManager;
     }
 
     @Override
@@ -17,7 +21,6 @@ public class Exit implements Command {
 
     @Override
     public void execute(String command) {
-        view.write("Are you sure you want to exit now? Never mind. It's done");
-        throw new ExitException();
+     view.write(dbManager.getTablesNames());
     }
 }
