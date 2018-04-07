@@ -33,7 +33,7 @@ public class Clear implements Command {
                 if (numRows == -1)
                     view.write(String.format("Table %s wasn't cleared", tableName));
                 else
-                    view.write(String.format("Table %s was successfully cleared:deleted %d rows", tableName, numRows));
+                    view.write(String.format("Table %s was successfully cleared", tableName));
             } catch (Exception e) {
                 view.write(String.format("Table %s wasn't cleared", tableName));
                 view.write("" + e);

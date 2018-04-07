@@ -37,10 +37,10 @@ public class Insert implements Command {
             try {
                 int num = dbManager.insertRows(tableName, data);
                 if (num==-1)
-                    view.write(String.format("Data wasn't inserted into table %s", tableName));
-                else view.write(String.format("%d rows were successfully inserted into table %s", num, tableName));
+                    view.write(String.format("Data wasn't inserted into table '%s'", tableName));
+                else view.write(String.format("%d rows were successfully inserted into table '%s'", num, tableName));
             } catch (Exception e) {
-                view.write(String.format("Data wasn't inserted into table %s", tableName));
+                view.write(String.format("Data wasn't inserted into table '%s'", tableName));
                 view.write("" + e);
             }
         } else {

@@ -1,6 +1,10 @@
 package ua.com.juja.cmd.model;
 
+import com.sun.javafx.scene.control.skin.VirtualFlow;
+
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -96,7 +100,7 @@ public class JDBCManager implements DBManager {
         valuesList = valuesList.substring(0, valuesList.length() - 1) + ")";
 
         String query = String.format("INSERT INTO public.%1$s%2$s VALUES %3$s",
-                                      table, columnsList, valuesList);
+                table, columnsList, valuesList);
 
         try (Statement st = connection.createStatement()) {
             return st.executeUpdate(query);
@@ -110,35 +114,29 @@ public class JDBCManager implements DBManager {
     public int updateRows(String table, DataSet condition, DataSet data) {
         checkIfConnected();
 
-        String query = "UPDATE public." + table;
+        String query = String.format("UPDATE public.%s SET ", table);
 
-        query += " SET ";
         Set<String> columns = data.getNames();
-        while (columns.iterator().hasNext()) {
-            String colName = columns.iterator().next();
-            query += String.format(query + "%1$s='%2$s', ", colName, data.get(colName));
+        for (String colName : columns) {
+            query = String.format(query + "%1$s='%2$s',", colName, data.get(colName));
         }
-        if (query.endsWith(", "))
-            query = query.substring(0, query.length() - 2);
+
+        if (query.endsWith(","))
+            query = query.substring(0, query.length() - 1);
 
         query += " WHERE ";
 
         columns = condition.getNames();
-        while (columns.iterator().hasNext()) {
-            String colName = columns.iterator().next();
-            query += String.format(query + "%1$s='%2$s' AND ", colName, data.get(colName));
+        for (String colName : columns) {
+            query = String.format(query + "%1$s='%2$s'", colName, condition.get(colName));
         }
 
-        if (query.endsWith(" AND "))
-            query = query.substring(0, query.length() - 5);
-
-        int numRows = 0;
+        System.out.println("QUERY="+query);
         try (Statement st = connection.createStatement()) {
-            numRows = st.executeUpdate(query);
-            return numRows;
+            return st.executeUpdate(query);
         } catch (SQLException e) {
             e.printStackTrace();
-            return numRows;
+            return -1;
         }
     }
 
@@ -146,23 +144,17 @@ public class JDBCManager implements DBManager {
     public int deleteRows(String table, DataSet data) {
         checkIfConnected();
 
-        String query = "DELETE FROM TABLE public." + table + " WHERE ";
+        String query = "DELETE FROM public." + table + " WHERE ";
         Set<String> columns = data.getNames();
-        while (columns.iterator().hasNext()) {
-            String colName = columns.iterator().next();
-            query += String.format(query + "%1$s='%2$s' AND ", colName, data.get(colName));
+        for (String colName : columns) {
+            query = String.format(query + "%1$s='%2$s'", colName, data.get(colName));
         }
 
-        if (query.endsWith(" AND "))
-            query = query.substring(0, query.length() - 5);
-
-        int numRows = 0;
         try (Statement st = connection.createStatement()) {
-            numRows = st.executeUpdate(query);
-            return numRows;
+            return st.executeUpdate(query);
         } catch (SQLException e) {
             e.printStackTrace();
-            return numRows;
+            return -1;
         }
     }
 
@@ -195,14 +187,51 @@ public class JDBCManager implements DBManager {
 
     @Override
     public List<DataSet> getTableData(String tableName) {
-        return null;
+        checkIfConnected();
+
+        List<DataSet> result = new ArrayList<>();
+        String query = "SELECT * FROM " + tableName;
+        try (Statement st = connection.createStatement();
+             ResultSet rs = st.executeQuery(query)) {
+
+            ResultSetMetaData metaData = rs.getMetaData();
+            int numColumns = metaData.getColumnCount();
+            while (rs.next()) {
+                DBDataSet dataSet = new DBDataSet();
+                for (int i = 1; i <= numColumns; i++) {
+                    dataSet.put(metaData.getColumnName(i), rs.getObject(i));
+                }
+                result.add(dataSet);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return result;
     }
 
     @Override
     public Set<String> getTableColumns(String tableName) {
         checkIfConnected();
 
-        return null;
+        Set<String> result = new LinkedHashSet<>();
+        String query = "SELECT * FROM " + tableName;
+
+        try (Statement st = connection.createStatement();
+             ResultSet rs = st.executeQuery(query)) {
+
+            ResultSetMetaData metaData = rs.getMetaData();
+            int numColumns = metaData.getColumnCount();
+            while (rs.next()) {
+                for (int i = 1; i <= numColumns; i++) {
+                    result.add(metaData.getColumnName(i));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return result;
     }
 
 

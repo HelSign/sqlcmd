@@ -12,8 +12,8 @@ public class DBDataSet implements DataSet {
 
     @Override
     public void update(DataSet newData) {
- Set <String> columns = newData.getNames();
-        for (String column:columns ){
+        Set<String> columns = newData.getNames();
+        for (String column : columns) {
             data.put(column, newData.get(column));
         }
     }
@@ -30,7 +30,6 @@ public class DBDataSet implements DataSet {
 
     @Override
     public List<Object> getValues() {
-        return (ArrayList<Object>) data.values();
-        //return new ArrayList<Object>( data.values());
+        return new ArrayList<Object>(data.values());
     }
 }
