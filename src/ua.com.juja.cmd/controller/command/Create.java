@@ -26,7 +26,7 @@ public class Create implements Command {
         if (input.length > 2) {
             try {
                 String tableName = input[1].trim();
-                if ( tableName.length() == 0) {
+                if (tableName.length() == 0) {
                     printError(command);
                     return;
                 }
@@ -35,9 +35,13 @@ public class Create implements Command {
                     columns[i] = columns[i].trim();
 
                 }
-                dbManager.createTable(tableName, columns);
-                view.write(String.format("Table %s was successfully created", tableName));
+
+                if (dbManager.createTable(tableName, columns) == 1)
+                    view.write(String.format("Table '%s' was successfully created", tableName));
+                else view.write(String.format("Table '%s' wasn't created", tableName));
+
             } catch (Exception e) {
+                view.write(String.format("Table wasn't created"));
                 view.write("" + e);
             }
         } else {

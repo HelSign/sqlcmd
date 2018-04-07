@@ -20,7 +20,7 @@ public class Clear implements Command {
 
     @Override
     public void execute(String command) {
-        if(!isExecutable(command)){
+        if (!isExecutable(command)) {
             printError(command);
             return;
         }
@@ -29,9 +29,13 @@ public class Clear implements Command {
         if (cmdParams.length == 2 && cmdParams[1].trim().length() > 0) {
             String tableName = cmdParams[1].trim();
             try {
-                dbManager.deleteRows(tableName);
-                view.write(String.format("Table %s was successfully cleared", tableName));
+                int numRows = dbManager.truncateTable(tableName);
+                if (numRows == -1)
+                    view.write(String.format("Table %s wasn't cleared", tableName));
+                else
+                    view.write(String.format("Table %s was successfully cleared:deleted %d rows", tableName, numRows));
             } catch (Exception e) {
+                view.write(String.format("Table %s wasn't cleared", tableName));
                 view.write("" + e);
             }
         } else {

@@ -10,7 +10,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 
-public class ClearTest {
+public class InsertTest {
     DBManager dbManager;
     View view;
     Command command;
@@ -20,39 +20,39 @@ public class ClearTest {
     public void setup() {
         dbManager = mock(DBManager.class);
         view = mock(View.class);
-        command = new Clear(view, dbManager);
+        command = new Insert(view, dbManager);
     }
 
     @Test
-    public void testClear() {
-        command.execute("clear|books");
-        verify(dbManager).truncateTable("books");
-        verify(view).write("Table books was successfully cleared");
+    public void testInsert() {
+        command.execute("insert|books|name|Harry Potter|author|J.K.Rowling|year|1998");
+       // verify(dbManager).insertRows();
+        verify(view).write("1 rows were successfully inserted into table books");
     }
 
     @Test
-    public void testClearWrongCommandParams() {
-        command.execute("clear| ");
+    public void testInsertWrongCommandParams() {
+        command.execute("insert|books| ");
         verify(view).write("Please enter a valid command");
     }
     @Test
-    public void testClearWrongCommand() {
-        command.execute("cclear|books");
+    public void testInsertWrongCommand() {
+        command.execute("cnsert|books");
         verify(view).write("Please enter a valid command");
     }
 
     @Test
     public void testIsExecutable() {
-        Assert.assertTrue(command.isExecutable("clear|books"));
+        Assert.assertTrue(command.isExecutable("insert|books"));
     }
     @Test
     public void testIsNotExecutable() {
-        Assert.assertFalse(command.isExecutable("cclear|books"));
+        Assert.assertFalse(command.isExecutable("cinsert|books"));
     }
 
     @Test
     public void testClearCommandNoParams() {
-        command.execute("clear");
+        command.execute("insert");
         verify(view).write("Please enter a valid command");
     }
 }

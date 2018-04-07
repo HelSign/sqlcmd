@@ -1,20 +1,27 @@
 package ua.com.juja.cmd.model;
 
+import java.util.List;
+import java.util.Set;
+
 public interface DBManager {
 
     void makeConnection(String dbName, String user, String password);
 
-    void createTable(String name, String[]columns);
+    int createTable(String name, String[] columns) ;
 
-    void insertRows();
+    int insertRows(String table, DataSet data);
 
-    void updateRows();
+    int updateRows(String table, DataSet condition, DataSet data);
 
-    void deleteRows(String table);
+    int deleteRows(String table, DataSet data);
 
-    void dropTable(String table);
+    int truncateTable(String table);
 
-    void getDataSet();
+    int dropTable(String table);
+
+    List<DataSet> getTableData(String tableName);
+
+    Set<String> getTableColumns(String tableName);
 
     String getTablesNames();
 

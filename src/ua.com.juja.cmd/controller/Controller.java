@@ -10,14 +10,20 @@ public class Controller {
     private Command[] commands;
 
     public Controller(DBManager dbManager, View view) {
-      //  this.dbManager = dbManager;
+        //  this.dbManager = dbManager;
         this.view = view;
         this.commands = new Command[]{
                 new Help(view),
                 new ConnectDB(view, dbManager),
-                new Create(view,dbManager),
-                new Drop(view,dbManager),
-                new Tables(view,dbManager),
+                new Create(view, dbManager),
+                new Drop(view, dbManager),
+                new Tables(view, dbManager),
+                new Clear(view, dbManager),
+                new Insert(view, dbManager),
+                new Update(view, dbManager),
+                new ViewData(view, dbManager),
+                new Delete(view, dbManager),
+                new Unsupported(view),
                 new Exit(view)};
     }
 
@@ -28,6 +34,8 @@ public class Controller {
             while (true) {
                 try {
                     String input = view.read().trim();
+                    if(input.length()==0)
+                        input="unsupported";//todo unsupported command
                     for (Command command : commands) {
                         if (command.isExecutable(input)) {
                             command.execute(input);
@@ -44,6 +52,5 @@ public class Controller {
         } catch (ExitException e) { //do nothing
         }
     }
-
 
 }
