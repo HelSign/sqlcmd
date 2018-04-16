@@ -23,31 +23,29 @@ public class Create implements Command {
     @Override
     public void execute(String command) {
         String[] input = command.split("\\|");
-        if (input.length > 2) {
+
+        if (input.length <= 2) {
+            printError(command);
+            return;
+        } else {
+            String tableName = input[1].trim();
+            if (tableName.length() == 0) {
+                printError(command);
+                return;
+            }
             try {
-                String tableName = input[1].trim();
-                if (tableName.length() == 0) {
-                    printError(command);
-                    return;
-                }
                 String[] columns = Arrays.copyOfRange(input, 2, input.length);
                 for (int i = 0; i < columns.length; i++) {
                     columns[i] = columns[i].trim();
-
                 }
-
-                if (dbManager.createTable(tableName, columns) == 1)
-                    view.write(String.format("Table '%s' was successfully created", tableName));
-                else
-                    view.write(String.format("Table '%s' wasn't created", tableName));
-
+                dbManager.createTable(tableName, columns);
+                view.write(String.format("Table '%s' was successfully created",
+                        tableName));
             } catch (Exception e) {
-                view.write(String.format("Table wasn't created"));
-                view.write("" + e);
+                view.write(String.format("Table '%s' wasn't created. The " +
+                        "reason is: ", tableName));
+                view.write(e.getMessage());
             }
-        } else {
-            printError(command);
-            return;
         }
     }
 

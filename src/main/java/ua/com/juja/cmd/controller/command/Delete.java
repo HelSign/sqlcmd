@@ -37,13 +37,14 @@ public class Delete implements Command {
 
             try {
                 int num = dbManager.deleteRows(tableName, data);
-                if (num == -1)
-                    view.write(String.format("Data wasn't deleted from table '%s'", tableName));
-                else
+               // if (num == -1)
+                 //   view.write(String.format("Data wasn't deleted from
+                // table '%s'", tableName));
+                //else
                     view.write(String.format("%d rows were successfully  deleted from table '%s'", num, tableName));
             } catch (Exception e) {
-                view.write(String.format("Data wasn't  deleted from table '%s'", tableName));
-                view.write("" + e);
+                view.write(String.format("Data wasn't  deleted from table " +
+                        "'%s'.The reason is:", tableName, e));
             }
         } else {
             printError(command);

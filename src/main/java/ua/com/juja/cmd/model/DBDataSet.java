@@ -32,4 +32,38 @@ public class DBDataSet implements DataSet {
     public List<Object> getValues() {
         return new ArrayList<Object>(data.values());
     }
+
+    @Override
+    public int hashCode() {
+        Set<String> names = ((DBDataSet) data).getNames();
+        int hashCode = 0;
+        for (String name : names) {
+            try {
+                hashCode += name.hashCode() + ((DBDataSet) data).get(name)
+                        .hashCode();
+            } catch (Exception e) {
+                return 0;
+            }
+        }
+        return hashCode;
+    }
+
+    @Override
+    public boolean equals(Object dataSet) {
+        if (dataSet == null) return false;
+        if (!(dataSet instanceof DBDataSet)) return false;
+
+        Set<String> names = ((DBDataSet) data).getNames();
+        for (String name : names) {
+            try {
+                if (!((DBDataSet) data).get(name).equals(((DBDataSet) dataSet).get
+                        (name)))
+                    return false;
+            } catch (Exception e) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

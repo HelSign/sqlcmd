@@ -2,6 +2,7 @@ package ua.com.juja.cmd.integration;
 
 import org.junit.Before;
 import org.junit.Test;
+import ua.com.juja.cmd.controller.Configuration;
 import ua.com.juja.cmd.controller.Main;
 import ua.com.juja.cmd.model.DBManager;
 import ua.com.juja.cmd.model.JDBCManager;
@@ -24,7 +25,6 @@ public class IntegrationTest {
         dbManager = new JDBCManager();
         out = new ByteArrayOutputStream();
         in = new SqlCmdInputStream();
-
         System.setOut(new PrintStream(out));
         System.setIn(in);
     }
@@ -38,30 +38,50 @@ public class IntegrationTest {
         Main.main(new String[0]);
 
         //then
-        assertEquals("**** Hello! You are using SQLCmd application" + lineSeparator() +
-                "**** Please enter a command. For help use command help" + lineSeparator() +
-                "**** List of commands:" + lineSeparator() +
-                "****     connect | database | username | password" + lineSeparator() +
-                "****         To connect to database" + lineSeparator() +
-                "****     help" + lineSeparator() +
-                "****         To see list of commands use command help" + lineSeparator() +
-                "****     exit" + lineSeparator() +
-                "****         To exit" + lineSeparator() +
-                "**** Are you sure you want to exit now? Never mind. It's done" + lineSeparator(), new String(out.toByteArray()));
+        String expected = "**** Hello! You are using SQLCmd application\n" +
+                "**** Please enter a command. For help use command help\n" +
+                "**** List of commands:\n" +
+                "**** To connect to database\n" +
+                "****     'connect' , format: connect | database | username | password\n" +
+                "**** To see list of tables\n" +
+                "****     'tables'\n" +
+                "**** To delete table\n" +
+                "****     'drop' , format: drop | tablename\n" +
+                "**** To create table\n" +
+                "****     'create' , format: create| tablename | column1 | column2 | column3 \n" +
+                "**** To insert rows into table\n" +
+                "****     'insert' , format: insert| tablename | column1 | value1 | column2 | value2 \n" +
+                "**** To update rows in table\n" +
+                "****     'update' , format: update| tablename | column1 | value1 | column2 | value2 \n" +
+                "**** To delete rows from table\n" +
+                "****     'delete' , format: delete| tablename | column1 | value1 | column2 | value2 \n" +
+                "**** To delete ALL rows from table\n" +
+                "****     'clear' , format: clear| tablename \n" +
+                "**** To see data in table\n" +
+                "****     'find' , format: find| tablename \n" +
+                "**** To see list of commands use command help\n" +
+                "****     'help'\n" +
+                "****  To exit\n" +
+                "****     'exit'\n" +
+                "**** Are you sure you want to exit now? Never mind. It's done\n";
+        assertEquals(expected.replaceAll("\\n", lineSeparator()),
+                new String(out.toByteArray()));
     }
 
     @Test
     public void testConnection() throws SQLException {
         //given
-        in.add("connect|sqlcmd|postgres|postgres");
+        in.add(connect());
         in.add("exit");
         //when
         Main.main(new String[0]);
         //then
-        assertEquals("**** Hello! You are using SQLCmd application" + lineSeparator() +
-                "**** Please enter a command. For help use command help" + lineSeparator() +
-                "You are connected to your DB now!" + lineSeparator() +
-                "**** Are you sure you want to exit now? Never mind. It's done" + lineSeparator(), new String(out.toByteArray()));
+        String expected = "**** Hello! You are using SQLCmd application\n" +
+                "**** Please enter a command. For help use command help\n" +
+                "You are connected to your DB now!\n" +
+                "**** Are you sure you want to exit now? Never mind. It's " +
+                "done\n";
+        assertEquals(expected.replaceAll("\\n", lineSeparator()), new String(out.toByteArray()));
     }
 
     @Test
@@ -72,8 +92,84 @@ public class IntegrationTest {
         //when
         Main.main(new String[0]);
         //then
-        assertEquals("**** Hello! You are using SQLCmd application" + lineSeparator() +
-                "**** Please enter a command. For help use command help" + lineSeparator() +
-                "**** Are you sure you want to exit now? Never mind. It's done" + lineSeparator(), new String(out.toByteArray()));
+        String expected = "**** Hello! You are using SQLCmd application\n" +
+                "**** Please enter a command. For help use command help\n" +
+                "**** Are you sure you want to exit now? Never mind. It's " +
+                "done\n";
+        assertEquals(expected.replaceAll("\\n", lineSeparator()), new String(out.toByteArray()));
     }
+
+    /*@Test
+    public void testCreate() {
+        in.add("connect|sqlcmd|postgres|postgres");
+        in.add("create|author|name|last_name|birthday");
+        in.add("exit");
+        //when
+        Main.main(new String[0]);
+        //then
+        String expected = "**** Hello! You are using SQLCmd application\n" +
+                "**** Please enter a command. For help use command help\n" +
+                "You are connected to your DB now!\n" +
+                "**** Table 'author' was successfully created\n" +
+                "**** Are you sure you want to exit now? Never mind. It's " +
+                "done\n";
+        assertEquals(expected.replaceAll("\\n", lineSeparator()), new String(out.toByteArray()));
+    }
+
+    @Test
+    public void testDrop() {
+        in.add("connect|sqlcmd|postgres|postgres");
+        in.add("drop|author");
+        in.add("exit");
+        //when
+        Main.main(new String[0]);
+        //then
+        String expected = "**** Hello! You are using SQLCmd application\n" +
+                "**** Please enter a command. For help use command help\n" +
+                "You are connected to your DB now!\n" +
+                "**** Table 'author' was successfully deleted\n" +
+                "**** Are you sure you want to exit now? Never mind. It's " +
+                "done\n";
+        assertEquals(expected.replaceAll("\\n", lineSeparator()), new String(out.toByteArray()));
+    }*/
+    @Test
+    public void testLifeCycle() {
+        in.add(connect());
+        in.add("create|author|name|last_name|birthday");
+        in.add("insert|author|name|Jane|last_name|Rowling|birthday|1963");
+        in.add("insert|author|name|Stiven|last_name|King|birthday|1955");
+        in.add("update|author|name|Stiven|birthday|1950");
+        in.add("find|author");
+        in.add("delete|author|name|Stiven");
+        in.add("clear|author");
+        in.add("drop|author");
+        in.add("exit");
+        //when
+        Main.main(new String[0]);
+        //then
+        String expected = "**** Hello! You are using SQLCmd application\n" +
+                "**** Please enter a command. For help use command help\n" +
+                "You are connected to your DB now!\n" +
+                "**** Table 'author' was successfully created\n" +
+                "**** 1 rows were successfully inserted into table 'author'\n" +
+                "**** 1 rows were successfully inserted into table 'author'\n" +
+                "**** 1 rows were updated in from table 'author'\n" +
+                "**** Table 'author' has following data\n" +
+                "**** [Jane, Rowling, 1963]\n" +
+                "**** [Stiven, King, 1950]\n" +
+                "**** End data\n" +
+                "**** 1 rows were successfully  deleted from table 'author'\n" +
+                "**** Table author was successfully cleared\n" +
+                "**** Table 'author' was successfully deleted\n" +
+                "**** Are you sure you want to exit now? Never mind. It's " +
+                "done\n";
+        assertEquals(expected.replaceAll("\\n", lineSeparator()), new String(out.toByteArray()));
+    }
+private String connect(){
+    Configuration configuration = new Configuration();
+    String dbName = configuration.getDbName();
+    String user = configuration.getUser();
+    String password = configuration.getPassword();
+    return String.format("connect|%s|%s|%s",dbName,user,password);
+}
 }

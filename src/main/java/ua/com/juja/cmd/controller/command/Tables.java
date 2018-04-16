@@ -21,6 +21,11 @@ public class Tables implements Command {
 
     @Override
     public void execute(String command) {
-        view.write(dbManager.getTablesNames());
+        try {
+            view.write(dbManager.getTablesNames());
+        } catch (Exception e) {
+            view.write("Can't print tables names. The reason is :");
+            view.write(e.getMessage());
+        }
     }
 }

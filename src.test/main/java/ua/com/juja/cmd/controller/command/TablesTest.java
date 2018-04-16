@@ -1,15 +1,18 @@
-package ua.com.juja.cmd.controller.command;
+package java.ua.com.juja.cmd.controller.command;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import ua.com.juja.cmd.model.DBManager;
-import ua.com.juja.cmd.view.View;
+import java.ua.com.juja.cmd.model.DBManager;
+import java.ua.com.juja.cmd.view.View;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.*;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class TablesTest {
     private DBManager dbManager;
@@ -25,7 +28,7 @@ public class TablesTest {
 
     @Test
     public void testIsExecutable() {
-        assertTrue(cmd.isExecutable("tables"));
+       assertTrue(cmd.isExecutable("tables"));
     }
 
     @Test
@@ -36,11 +39,8 @@ public class TablesTest {
     @Test
     public void testExecute() {
         //given
-        try {
-            when(dbManager.getTablesNames()).thenReturn("user,books,");
-        } catch (Exception e) {
-            view.write("Can't print tables names. The reason is: " + e.getMessage());
-        }
+        when(dbManager.getTablesNames())
+                .thenReturn("user,books,");
         //when
         cmd.execute("tables");
         //then
@@ -50,11 +50,8 @@ public class TablesTest {
     @Test
     public void testExecuteForEmptyList() {
         //given
-        try {
-            when(dbManager.getTablesNames()).thenReturn("");
-        } catch (Exception e) {
-            view.write("Can't print tables names. The reason is: " + e.getMessage());
-        }
+        when(dbManager.getTablesNames())
+                .thenReturn("");
         //when
         cmd.execute("tables");
         //then

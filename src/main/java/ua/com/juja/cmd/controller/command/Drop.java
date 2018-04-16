@@ -3,6 +3,8 @@ package ua.com.juja.cmd.controller.command;
 import ua.com.juja.cmd.model.DBManager;
 import ua.com.juja.cmd.view.View;
 
+import java.sql.SQLException;
+
 public class Drop implements Command {
     private View view;
     private DBManager dbManager;
@@ -25,17 +27,14 @@ public class Drop implements Command {
             return;
         }
         String[] cmdParams = command.split("\\|");
-
         if (cmdParams.length == 2 && cmdParams[1].trim().length() > 0) {
             String tableName = cmdParams[1].trim();
             try {
-                if (dbManager.dropTable(tableName) == 1)
-                    view.write(String.format("Table '%s' was successfully deleted", tableName));
-                else
-                    view.write(String.format("Table '%s' wasn't deleted", tableName));
+                dbManager.dropTable(tableName);
+                view.write(String.format("Table '%s' was successfully deleted", tableName));
             } catch (Exception e) {
-                view.write(String.format("Table '%s' wasn't deleted", tableName));
-                view.write("" + e);
+                view.write(String.format("Table '%s' wasn't deleted. The " +
+                        "reason is: %s", tableName, e.getMessage()));
             }
         } else {
             printError(command);

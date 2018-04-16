@@ -1,45 +1,36 @@
 package ua.com.juja.cmd.model;
 
+import ua.com.juja.cmd.controller.Configuration;
+
+import java.io.InputStream;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class JDBCManager implements DBManager {
     private Connection connection;
-    private String user;
-    private String password;
-    private String url = "jdbc:postgresql://127.0.0.1:5432/";
-    private String dbName;
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
 
     @Override
     public void makeConnection(String dbName, String user, String password) { //todo refactor code below
-        this.dbName = dbName;
-        this.user = user;
-        this.password = password;
-
         if (connection != null) {
             System.out.println("You have already been connected to your DB");
             return;
         }
+
+        Configuration configuration = new Configuration();
+        String url = configuration.getJDBCDriver() +
+                configuration.getServer() + ":" + configuration.getPort()
+                + "/" + dbName;
         try {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("PostgreSQL JDBC Driver is not in the library path!", e);
         }
         try {
-            connection = DriverManager.getConnection(url + dbName, user, password);
+            connection = DriverManager.getConnection(url, user, password);
         } catch (SQLException e) {
-            throw new RuntimeException(String.format("Connection failed to database: %s as user: %s ", dbName, user), e);
+            throw new RuntimeException(String.format("Connection failed to " +
+                    "database: %s as user: %s , url: %s ", dbName, user, url),
+                    e);
         }
         if (connection != null) {
             System.out.println("You are connected to your DB now!");
@@ -49,7 +40,7 @@ public class JDBCManager implements DBManager {
     }
 
     @Override
-    public int createTable(String name, String[] columns) {
+    public int createTable(String name, String[] columns) throws SQLException {
         checkIfConnected();
 
         String query = "CREATE TABLE " + name + " (";
@@ -61,12 +52,10 @@ public class JDBCManager implements DBManager {
         try (Statement stmt = connection.createStatement()) {
             stmt.execute(query);
         } catch (SQLException e) {
-            e.printStackTrace();
-            return -1;
+            throw e;
         }
         return 1;
     }
-
 
     private boolean closeConnection() {
         if (connection != null) {
@@ -77,13 +66,12 @@ public class JDBCManager implements DBManager {
                 e.printStackTrace();
                 return false;
             }
-
             return true;
         } else return true;
     }
 
     @Override
-    public int insertRows(String table, DataSet data) {
+    public int insertRows(String table, DataSet data) throws SQLException {
         checkIfConnected();
 
         Set<String> columns = data.getNames();
@@ -100,12 +88,13 @@ public class JDBCManager implements DBManager {
         String query = String.format("INSERT INTO public.%1$s%2$s VALUES %3$s",
                 table, columnsList, valuesList);
 
+        int numRows = -1;
         try (Statement st = connection.createStatement()) {
-            return st.executeUpdate(query);
+            numRows = st.executeUpdate(query);
         } catch (SQLException e) {
-            e.printStackTrace();
-            return -1;
+            throw e;
         }
+        return numRows;
     }
 
     @Override
@@ -128,8 +117,6 @@ public class JDBCManager implements DBManager {
         for (String colName : columns) {
             query = String.format(query + "%1$s='%2$s'", colName, condition.get(colName));
         }
-
-        System.out.println("QUERY=" + query);
         try (Statement st = connection.createStatement()) {
             return st.executeUpdate(query);
         } catch (SQLException e) {
@@ -170,15 +157,14 @@ public class JDBCManager implements DBManager {
     }
 
     @Override
-    public int dropTable(String table) {
+    public int dropTable(String table) throws SQLException {
         checkIfConnected();
 
         String query = "DROP TABLE public." + table;
         try (Statement st = connection.createStatement()) {
             st.execute(query);
         } catch (SQLException e) {
-            e.printStackTrace();
-            return -1;
+            throw e;
         }
         return 1;
     }

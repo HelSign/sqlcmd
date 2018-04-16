@@ -1,10 +1,10 @@
-package ua.com.juja.cmd.controller.command;
+package java.ua.com.juja.cmd.controller.command;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import ua.com.juja.cmd.model.DBManager;
-import ua.com.juja.cmd.view.View;
+import java.ua.com.juja.cmd.model.DBManager;
+import java.ua.com.juja.cmd.view.View;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -26,11 +26,7 @@ public class ClearTest {
     @Test
     public void testClear() {
         command.execute("clear|books");
-        try {
-            verify(dbManager).truncateTable("books");
-        } catch (Exception e) {
-            view.write("Can't clear table. The reason is: " + e.getMessage());
-        }
+        verify(dbManager).truncateTable("books");
         verify(view).write("Table books was successfully cleared");
     }
 
@@ -39,7 +35,6 @@ public class ClearTest {
         command.execute("clear| ");
         verify(view).write("Please enter a valid command");
     }
-
     @Test
     public void testClearWrongCommand() {
         command.execute("cclear|books");
@@ -50,7 +45,6 @@ public class ClearTest {
     public void testIsExecutable() {
         Assert.assertTrue(command.isExecutable("clear|books"));
     }
-
     @Test
     public void testIsNotExecutable() {
         Assert.assertFalse(command.isExecutable("cclear|books"));

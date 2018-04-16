@@ -26,7 +26,6 @@ public class Insert implements Command {
             return;
         }
         String[] cmdParams = command.split("\\|");
-
         if (cmdParams.length > 4 && cmdParams[1].trim().length() > 0) {
             String tableName = cmdParams[1].trim();
             DBDataSet data = new DBDataSet();
@@ -35,15 +34,12 @@ public class Insert implements Command {
             }
             try {
                 int num = dbManager.insertRows(tableName, data);
-                if (num == -1)
-                    view.write(String.format("Data wasn't inserted into table '%s'", tableName));
-                else
-                    view.write(String.format("%d rows were successfully inserted into table '%s'", num, tableName));
+                view.write(String.format("%d rows were successfully inserted into table '%s'", num, tableName));
             } catch (Exception e) {
-                view.write(String.format("Data wasn't inserted into table '%s'", tableName));
-                view.write("" + e);
+                view.write(String.format("Data wasn't inserted into table " +
+                        "'%s'. The reason is: %s", tableName, e.getMessage()));
             }
-        } else {
+        } else {//clean this in all commands
             printError(command);
             return;
         }

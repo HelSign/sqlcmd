@@ -23,7 +23,7 @@ public class Controller {
                 new Update(view, dbManager),
                 new ViewData(view, dbManager),
                 new Delete(view, dbManager),
-                new Unsupported(view),
+                new Unsupported(view),//todo unsupported command
                 new Exit(view)};
     }
 
