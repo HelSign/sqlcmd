@@ -15,7 +15,6 @@ public class CreateTest {
     View view;
     Command command;
 
-
     @Before
     public void setup() {
         dbManager = mock(DBManager.class);
