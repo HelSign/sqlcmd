@@ -5,7 +5,6 @@ import org.junit.Test;
 import ua.com.juja.cmd.controller.Configuration;
 import ua.com.juja.cmd.view.Console;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public abstract class DBManagerTest {

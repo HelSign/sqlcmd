@@ -3,7 +3,6 @@ package ua.com.juja.cmd.controller.command;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import ua.com.juja.cmd.model.DBManager;
 import ua.com.juja.cmd.view.View;
 
 import static org.mockito.Mockito.mock;

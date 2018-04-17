@@ -43,8 +43,7 @@ public class Create implements Command {
                         tableName));
             } catch (Exception e) {
                 view.write(String.format("Table '%s' wasn't created. The " +
-                        "reason is: ", tableName));
-                view.write(e.getMessage());
+                        "reason is: %s", tableName, e.getMessage()));
             }
         }
     }

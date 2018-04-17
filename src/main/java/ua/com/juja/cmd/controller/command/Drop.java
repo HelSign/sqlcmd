@@ -3,8 +3,6 @@ package ua.com.juja.cmd.controller.command;
 import ua.com.juja.cmd.model.DBManager;
 import ua.com.juja.cmd.view.View;
 
-import java.sql.SQLException;
-
 public class Drop implements Command {
     private View view;
     private DBManager dbManager;

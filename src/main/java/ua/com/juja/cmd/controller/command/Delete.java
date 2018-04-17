@@ -44,7 +44,7 @@ public class Delete implements Command {
                     view.write(String.format("%d rows were successfully  deleted from table '%s'", num, tableName));
             } catch (Exception e) {
                 view.write(String.format("Data wasn't  deleted from table " +
-                        "'%s'.The reason is:", tableName, e));
+                        "'%s'.The reason is:%s", tableName, e));
             }
         } else {
             printError(command);

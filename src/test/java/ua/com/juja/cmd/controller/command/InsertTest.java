@@ -35,7 +35,7 @@ public class InsertTest {
             verify(dbManager).insertRows("book", testData);
         } catch (Exception e) {
             view.write(String.format("Data wasn't inserted into table " +
-                    "'book'. The reason is: ", e.getMessage()));
+                    "'book'. The reason is: %s", e.getMessage()));
         }
        verify(view).write("0 rows were successfully inserted into table " +
                 "'book'");
