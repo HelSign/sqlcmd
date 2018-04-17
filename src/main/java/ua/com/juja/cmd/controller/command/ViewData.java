@@ -49,10 +49,8 @@ public class ViewData implements Command {
                 view.write(String.format("Can't show data of '%s' table", tableName));
                 view.write("" + e);
             }
-        } else {
+        } else
             printError(command);
-            return;
-        }
     }
 
     private void printError(String command) {

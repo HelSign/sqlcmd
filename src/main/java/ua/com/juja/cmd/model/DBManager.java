@@ -9,7 +9,7 @@ public interface DBManager {
     void makeConnection(String dbName, String user, String password) throws SQLException;
 
     int createTable(String name, String[] columns) throws SQLException;
-    //todoarraylist
+    //todo arraylist
 
     int insertRows(String table, DataSet data) throws SQLException;
 

@@ -34,10 +34,8 @@ public class Drop implements Command {
                 view.write(String.format("Table '%s' wasn't deleted. The " +
                         "reason is: %s", tableName, e.getMessage()));
             }
-        } else {
+        } else
             printError(command);
-            return;
-        }
     }
 
     private void printError(String command) {
