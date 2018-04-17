@@ -99,39 +99,19 @@ public class IntegrationTest {
         assertEquals(expected.replaceAll("\\n", lineSeparator()), new String(out.toByteArray()));
     }
 
-    /*@Test
-    public void testCreate() {
-        in.add("connect|sqlcmd|postgres|postgres");
-        in.add("create|author|name|last_name|birthday");
+    @Test
+    public void testUnsupported() {
+        in.add("");
         in.add("exit");
-        //when
         Main.main(new String[0]);
-        //then
         String expected = "**** Hello! You are using SQLCmd application\n" +
                 "**** Please enter a command. For help use command help\n" +
-                "You are connected to your DB now!\n" +
-                "**** Table 'author' was successfully created\n" +
+                "**** Command '' is not supported\n" +
                 "**** Are you sure you want to exit now? Never mind. It's " +
                 "done\n";
         assertEquals(expected.replaceAll("\\n", lineSeparator()), new String(out.toByteArray()));
     }
 
-    @Test
-    public void testDrop() {
-        in.add("connect|sqlcmd|postgres|postgres");
-        in.add("drop|author");
-        in.add("exit");
-        //when
-        Main.main(new String[0]);
-        //then
-        String expected = "**** Hello! You are using SQLCmd application\n" +
-                "**** Please enter a command. For help use command help\n" +
-                "You are connected to your DB now!\n" +
-                "**** Table 'author' was successfully deleted\n" +
-                "**** Are you sure you want to exit now? Never mind. It's " +
-                "done\n";
-        assertEquals(expected.replaceAll("\\n", lineSeparator()), new String(out.toByteArray()));
-    }*/
     @Test
     public void testLifeCycle() {
         in.add(connect());
@@ -165,11 +145,12 @@ public class IntegrationTest {
                 "done\n";
         assertEquals(expected.replaceAll("\\n", lineSeparator()), new String(out.toByteArray()));
     }
-private String connect(){
-    Configuration configuration = new Configuration();
-    String dbName = configuration.getDbName();
-    String user = configuration.getUser();
-    String password = configuration.getPassword();
-    return String.format("connect|%s|%s|%s",dbName,user,password);
-}
+
+    private String connect() {
+        Configuration configuration = new Configuration();
+        String dbName = configuration.getDbName();
+        String user = configuration.getUser();
+        String password = configuration.getPassword();
+        return String.format("connect|%s|%s|%s", dbName, user, password);
+    }
 }

@@ -10,55 +10,27 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 
-public class ClearTest {
-    DBManager dbManager;
+public class UnsupportedTest {
     View view;
     Command command;
 
 
     @Before
     public void setup() {
-        dbManager = mock(DBManager.class);
         view = mock(View.class);
-        command = new Clear(view, dbManager);
+        command = new Unsupported(view);
     }
 
     @Test
-    public void testClear() {
-        command.execute("clear|books");
-        try {
-            verify(dbManager).truncateTable("books");
-        } catch (Exception e) {
-            view.write("Can't clear table. The reason is: " + e.getMessage());
-        }
-        verify(view).write("Table books was successfully cleared");
+    public void testUnsupported() {
+        command.execute("dd");
+        verify(view).write("Command 'dd' is not supported");
     }
 
-    @Test
-    public void testClearWrongCommandParams() {
-        command.execute("clear| ");
-        verify(view).write("Please enter a valid command");
-    }
-
-    @Test
-    public void testClearWrongCommand() {
-        command.execute("cclear|books");
-        verify(view).write("Please enter a valid command");
-    }
 
     @Test
     public void testIsExecutable() {
-        Assert.assertTrue(command.isExecutable("clear|books"));
+        Assert.assertTrue(command.isExecutable("sd"));
     }
 
-    @Test
-    public void testIsNotExecutable() {
-        Assert.assertFalse(command.isExecutable("cclear|books"));
-    }
-
-    @Test
-    public void testClearCommandNoParams() {
-        command.execute("clear");
-        verify(view).write("Please enter a valid command");
-    }
 }
