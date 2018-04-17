@@ -5,12 +5,10 @@ import ua.com.juja.cmd.view.View;
 import ua.com.juja.cmd.controller.command.*;
 
 public class Controller {
-    //private DBManager dbManager;
     private View view;
     private Command[] commands;
 
     public Controller(DBManager dbManager, View view) {
-        //  this.dbManager = dbManager;
         this.view = view;
         this.commands = new Command[]{
                 new Help(view),
@@ -23,8 +21,8 @@ public class Controller {
                 new Update(view, dbManager),
                 new ViewData(view, dbManager),
                 new Delete(view, dbManager),
-                new Unsupported(view),//todo unsupported command
-                new Exit(view)};
+                new Exit(view),
+                new Unsupported(view)};
     }
 
     public void run() {
@@ -34,8 +32,6 @@ public class Controller {
             while (true) {
                 try {
                     String input = view.read().trim();
-                    if (input.length() == 0)
-                        input = "unsupported";//todo unsupported command
                     for (Command command : commands) {
                         if (command.isExecutable(input)) {
                             command.execute(input);
@@ -45,12 +41,11 @@ public class Controller {
                 } catch (Exception e) {
                     if (e instanceof ExitException)
                         throw e;
-                    view.write("" + e);
+                    view.write(e.getMessage());
                     break;
                 }
             }
         } catch (ExitException e) { //do nothing
         }
     }
-
 }

@@ -2,7 +2,6 @@ package ua.com.juja.cmd.model;
 
 import ua.com.juja.cmd.controller.Configuration;
 
-import java.io.InputStream;
 import java.sql.*;
 import java.util.*;
 
@@ -43,14 +42,18 @@ public class JDBCManager implements DBManager {
     public int createTable(String name, String[] columns) throws SQLException {
         checkIfConnected();
 
-        String query = "CREATE TABLE " + name + " (";
+        StringBuilder query = new StringBuilder();
+        query.append("CREATE TABLE " + name + " (");
         for (String col : columns) {
-            query += col + " varchar(40),";
+            query.append(col);
+            query.append(" varchar(40),");
         }
-        query = query.substring(0, query.length() - 1) + ")";//to remove last comma sign
+        //to remove last comma sign
+        query.deleteCharAt(query.length() - 1);
+        query.append( ")");
 
         try (Statement stmt = connection.createStatement()) {
-            stmt.execute(query);
+            stmt.execute(query.toString());
         } catch (SQLException e) {
             throw e;
         }
@@ -84,11 +87,9 @@ public class JDBCManager implements DBManager {
         }
         columnsList = columnsList.substring(0, columnsList.length() - 1) + ")";
         valuesList = valuesList.substring(0, valuesList.length() - 1) + ")";
-
         String query = String.format("INSERT INTO public.%1$s%2$s VALUES %3$s",
                 table, columnsList, valuesList);
-
-        int numRows = -1;
+        int numRows;
         try (Statement st = connection.createStatement()) {
             numRows = st.executeUpdate(query);
         } catch (SQLException e) {

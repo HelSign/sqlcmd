@@ -30,7 +30,7 @@ public class DBDataSet implements DataSet {
 
     @Override
     public List<Object> getValues() {
-        return new ArrayList<Object>(data.values());
+        return new ArrayList<>(data.values());
     }
 
     @Override

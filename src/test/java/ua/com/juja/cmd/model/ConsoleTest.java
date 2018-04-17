@@ -7,7 +7,6 @@ import ua.com.juja.cmd.view.Console;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import static org.junit.Assert.assertEquals;
 
 public class ConsoleTest {
     private Console console = new Console();
