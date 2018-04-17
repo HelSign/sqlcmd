@@ -48,10 +48,8 @@ public class Update implements Command {
                 view.write(String.format("Data wasn't updated in table '%s'", tableName));
                 view.write("" + e);
             }
-        } else {
+        } else
             printError(command);
-            return;
-        }
     }
 
     private void printError(String command) {

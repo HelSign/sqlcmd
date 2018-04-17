@@ -38,10 +38,7 @@ public class Clear implements Command {
                 view.write(String.format("Table %s wasn't cleared", tableName));
                 view.write("" + e);
             }
-        } else {
-            printError(command);
-            return;
-        }
+        } else printError(command);
     }
 
     private void printError(String command) {

@@ -39,10 +39,8 @@ public class Insert implements Command {
                 view.write(String.format("Data wasn't inserted into table " +
                         "'%s'. The reason is: %s", tableName, e.getMessage()));
             }
-        } else {//clean this in all commands
+        } else
             printError(command);
-            return;
-        }
     }
 
     private void printError(String command) {

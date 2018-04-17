@@ -5,9 +5,9 @@ import ua.com.juja.cmd.view.Console;
 
 public class Main {
     public static void main(String[] args) {
-        JDBCManager mngr = new JDBCManager();
+        JDBCManager manager = new JDBCManager();
         Console console = new Console();
-        Controller cntrl = new Controller(mngr, console);
-        cntrl.run();
+        Controller controller = new Controller(manager, console);
+        controller.run();
     }
 }
