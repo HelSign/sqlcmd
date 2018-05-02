@@ -11,13 +11,11 @@ public class Configuration {
 
     public Configuration() {
         properties = new Properties();
-        try (InputStream inputStream = getClass().getClassLoader()
-                .getResourceAsStream("jdbc.properties")) {
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("jdbc.properties")) {
             properties.load(inputStream);
         } catch (IOException e) {
             throw new RuntimeException("Can't load jdbc properties file: " + e);
         }
-
     }
 
     public String getUser() {

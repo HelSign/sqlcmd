@@ -139,7 +139,7 @@ public class IntegrationTest {
                 "**** [Stiven, King, 1950]\n" +
                 "**** End data\n" +
                 "**** 1 rows were successfully  deleted from table 'author'\n" +
-                "**** Table author was successfully cleared\n" +
+                "**** Table 'author' was successfully cleared\n" +
                 "**** Table 'author' was successfully deleted\n" +
                 "**** Are you sure you want to exit now? Never mind. It's " +
                 "done\n";

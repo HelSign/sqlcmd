@@ -1,8 +1,14 @@
 package ua.com.juja.cmd.controller.command;
 
-public interface Command {
+import ua.com.juja.cmd.model.DBManager;
+import ua.com.juja.cmd.view.View;
 
+public interface Command {
     boolean isExecutable(String command);
 
     void execute(String command);
+
+    default void printError(View view, String command) {
+        view.write("Command '" + command + "' is not valid");
+    }
 }

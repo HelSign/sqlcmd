@@ -31,19 +31,19 @@ public class ClearTest {
         } catch (Exception e) {
             view.write("Can't clear table. The reason is: " + e.getMessage());
         }
-        verify(view).write("Table books was successfully cleared");
+        verify(view).write("Table 'books' was successfully cleared");
     }
 
     @Test
     public void testClearWrongCommandParams() {
         command.execute("clear| ");
-        verify(view).write("Please enter a valid command");
+        verify(view).write("Command 'clear| ' is not valid");
     }
 
     @Test
     public void testClearWrongCommand() {
         command.execute("cclear|books");
-        verify(view).write("Please enter a valid command");
+        verify(view).write("Command 'cclear|books' is not valid");
     }
 
     @Test
@@ -59,6 +59,6 @@ public class ClearTest {
     @Test
     public void testClearCommandNoParams() {
         command.execute("clear");
-        verify(view).write("Please enter a valid command");
+        verify(view).write("Command 'clear' is not valid");
     }
 }

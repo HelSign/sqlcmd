@@ -21,27 +21,24 @@ public class Clear implements Command {
     @Override
     public void execute(String command) {
         if (!isExecutable(command)) {
-            printError(command);
+            printError(view,command);
             return;
         }
-
         String[] cmdParams = command.split("\\|");
-        if (cmdParams.length == 2 && cmdParams[1].trim().length() > 0) {
-            String tableName = cmdParams[1].trim();
-            try {
-                int numRows = dbManager.truncateTable(tableName);
-                if (numRows == -1)
-                    view.write(String.format("Table %s wasn't cleared", tableName));
-                else
-                    view.write(String.format("Table %s was successfully cleared", tableName));
-            } catch (Exception e) {
-                view.write(String.format("Table %s wasn't cleared", tableName));
-                view.write("" + e);
-            }
-        } else printError(command);
-    }
-
-    private void printError(String command) {
-        view.write("Please enter a valid command");
+        if (cmdParams.length < 2 || cmdParams[1].trim().length() < 1){
+            printError(view,command);
+            return;
+        }
+        String tableName = cmdParams[1].trim();
+        try {
+            int numRows = dbManager.truncateTable(tableName);
+            if (numRows == -1)
+                view.write(String.format("Table '%s' wasn't cleared", tableName));
+            else
+                view.write(String.format("Table '%s' was successfully cleared", tableName));
+        } catch (Exception e) {
+            view.write(String.format("Table '%s' wasn't cleared", tableName));
+            view.write(e.getMessage());
+        }
     }
 }

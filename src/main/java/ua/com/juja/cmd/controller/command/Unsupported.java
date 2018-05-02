@@ -4,7 +4,6 @@ import ua.com.juja.cmd.view.View;
 
 public class Unsupported implements Command {
     private View view;
-    final static public String COMMAND = "unsupported";
 
     public Unsupported(View view) {
         this.view = view;
