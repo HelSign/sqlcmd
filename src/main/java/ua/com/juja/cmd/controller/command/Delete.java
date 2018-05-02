@@ -9,8 +9,7 @@ public class Delete implements Command {
 
     private View view;
     private DBManager dbManager;
-
-    final static public String COMMAND = "delete";
+    final static private String COMMAND = "delete";
 
     public Delete(View view, DBManager dbManager) {
         this.view = view;
@@ -25,7 +24,7 @@ public class Delete implements Command {
     @Override
     public void execute(String command) {
         if (!isExecutable(command)) {
-            printError(command);
+            printError(view, command);
             return;
         }
         String[] cmdParams = command.split("\\|");
@@ -37,20 +36,16 @@ public class Delete implements Command {
 
             try {
                 int num = dbManager.deleteRows(tableName, data);
-               // if (num == -1)
-                 //   view.write(String.format("Data wasn't deleted from
+                // if (num == -1)
+                //   view.write(String.format("Data wasn't deleted from
                 // table '%s'", tableName));
                 //else
-                    view.write(String.format("%d rows were successfully  deleted from table '%s'", num, tableName));
+                view.write(String.format("%d rows were successfully  deleted from table '%s'", num, tableName));
             } catch (Exception e) {
                 view.write(String.format("Data wasn't  deleted from table " +
                         "'%s'.The reason is:%s", tableName, e));
             }
         } else
-            printError(command);
-    }
-
-    private void printError(String command) {
-        view.write("Please enter a valid command");
+            printError(view, command);
     }
 }

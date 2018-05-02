@@ -106,7 +106,7 @@ public class IntegrationTest {
         Main.main(new String[0]);
         String expected = "**** Hello! You are using SQLCmd application\n" +
                 "**** Please enter a command. For help use command help\n" +
-                "**** Command '' is not supported\n" +
+                "**** Command '' is not valid\n" +
                 "**** Are you sure you want to exit now? Never mind. It's " +
                 "done\n";
         assertEquals(expected.replaceAll("\\n", lineSeparator()), new String(out.toByteArray()));

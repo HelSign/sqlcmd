@@ -44,13 +44,13 @@ public class InsertTest {
     @Test
     public void testInsertWrongCommandParams() {
         command.execute("insert|books| ");
-        verify(view).write("Please enter a valid command");
+        verify(view).write("Command 'insert|books| ' is not valid");
     }
 
     @Test
     public void testInsertWrongCommand() {
         command.execute("cnsert|books");
-        verify(view).write("Please enter a valid command");
+        verify(view).write("Command 'cnsert|books' is not valid");
     }
 
     @Test
@@ -66,6 +66,6 @@ public class InsertTest {
     @Test
     public void testClearCommandNoParams() {
         command.execute("insert");
-        verify(view).write("Please enter a valid command");
+        verify(view).write("Command 'insert' is not valid");
     }
 }

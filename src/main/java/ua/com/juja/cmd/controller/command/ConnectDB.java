@@ -6,7 +6,7 @@ import ua.com.juja.cmd.view.View;
 public class ConnectDB implements Command {
     private View view;
     private DBManager dbManager;
-    final static public String COMMAND = "connect";
+    final static private String COMMAND = "connect";
 
     public ConnectDB(View view, DBManager dbManager) {
         this.view = view;
@@ -25,7 +25,7 @@ public class ConnectDB implements Command {
 
     private void connectToDB(String command) {
         if (!isExecutable(command)) {
-            printError(command);
+            printError(view, command);
             return;
         }
         String user;
@@ -37,7 +37,7 @@ public class ConnectDB implements Command {
             password = cmdWithParams[3];
             dbName = cmdWithParams[1];
         } else {
-            printError(command);
+            printError(view, command);
             return;
         }
         try {
@@ -47,9 +47,4 @@ public class ConnectDB implements Command {
             view.write(e.getMessage());
         }
     }
-
-    private void printError(String command) {
-        view.write("Please enter a valid command");
-    }
-
 }

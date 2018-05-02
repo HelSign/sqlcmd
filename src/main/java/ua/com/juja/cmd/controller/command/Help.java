@@ -4,7 +4,7 @@ import ua.com.juja.cmd.view.View;
 
 public class Help implements Command {
     private View view;
-    final static public String COMMAND = "help";
+    final static private String COMMAND = "help";
 
     public Help(View view) {
         this.view = view;

@@ -7,7 +7,7 @@ public class Tables implements Command {
     private View view;
     private DBManager dbManager;
 
-    final static public String COMMAND = "tables";
+    final static private String COMMAND = "tables";
 
     public Tables(View view, DBManager dbManager) {
         this.view = view;

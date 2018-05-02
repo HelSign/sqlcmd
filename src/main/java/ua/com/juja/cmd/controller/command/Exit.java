@@ -4,7 +4,7 @@ import ua.com.juja.cmd.view.View;
 
 public class Exit implements Command {
     private View view;
-    final static public String COMMAND = "exit";
+    final static private String COMMAND = "exit";
 
     public Exit(View view) {
         this.view = view;

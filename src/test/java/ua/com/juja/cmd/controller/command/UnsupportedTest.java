@@ -23,7 +23,7 @@ public class UnsupportedTest {
     @Test
     public void testUnsupported() {
         command.execute("dd");
-        verify(view).write("Command 'dd' is not supported");
+        verify(view).write("Command 'dd' is not valid");
     }
 
 

@@ -38,7 +38,7 @@ public class DropTest {
     @Test
     public void testDropWrongCommand() {
         command.execute("drop| ");
-        verify(view).write("Please enter a valid command");
+        verify(view).write("Command 'drop| ' is not valid");
     }
 
     @Test
@@ -54,6 +54,6 @@ public class DropTest {
     @Test
     public void testDropCommandNoParams() {
         command.execute("drop");
-        verify(view).write("Please enter a valid command");
+        verify(view).write("Command 'drop' is not valid");
     }
 }

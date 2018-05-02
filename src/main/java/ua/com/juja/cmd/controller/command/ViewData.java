@@ -10,8 +10,7 @@ public class ViewData implements Command {
 
     private View view;
     private DBManager dbManager;
-
-    final static public String COMMAND = "find";
+    final static private String COMMAND = "find";
 
     public ViewData(View view, DBManager dbManager) {
         this.view = view;
@@ -26,11 +25,10 @@ public class ViewData implements Command {
     @Override
     public void execute(String command) {
         if (!isExecutable(command)) {
-            printError(command);
+            printError(view, command);
             return;
         }
         String[] cmdParams = command.split("\\|");
-
         if (cmdParams.length == 2 && cmdParams[1].trim().length() > 0) {
             String tableName = cmdParams[1].trim();
             try {
@@ -39,7 +37,6 @@ public class ViewData implements Command {
                     view.write(String.format("Can't show data of '%s' table", tableName));
                 else {
                     view.write(String.format("Table '%s' has following data", tableName));
-
                     for (DataSet dataSet : result) {
                         view.write(dataSet.getValues().toString());
                     }
@@ -47,14 +44,10 @@ public class ViewData implements Command {
                 }
             } catch (Exception e) {
                 view.write(String.format("Can't show data of '%s' table", tableName));
-                view.write("" + e);
+                view.write(e.getMessage());
             }
         } else
-            printError(command);
-    }
-
-    private void printError(String command) {
-        view.write("Please enter a valid command");
+            printError(view, command);
     }
 
 }

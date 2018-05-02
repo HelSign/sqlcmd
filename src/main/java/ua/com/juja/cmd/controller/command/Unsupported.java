@@ -16,6 +16,6 @@ public class Unsupported implements Command {
 
     @Override
     public void execute(String command) {
-        view.write("Command '" + command + "' is not supported");
+        printError(view, command);
     }
 }

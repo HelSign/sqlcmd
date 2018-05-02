@@ -37,13 +37,13 @@ public class CreateTest {
     @Test
     public void testCreateWrongCommandParams() {
         command.execute("create| ");
-        verify(view).write("Please enter a valid command");
+        verify(view).write("Command 'create| ' is not valid");
     }
 
     @Test
     public void testClearWrongCommand() {
         command.execute("ccreate|author");
-        verify(view).write("Please enter a valid command");
+        verify(view).write("Command 'ccreate|author' is not valid");
     }
 
     @Test
@@ -59,6 +59,6 @@ public class CreateTest {
     @Test
     public void testClearCommandNoParams() {
         command.execute("create|author");
-        verify(view).write("Please enter a valid command");
+        verify(view).write("Command 'create|author' is not valid");
     }
 }

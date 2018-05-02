@@ -7,7 +7,7 @@ import ua.com.juja.cmd.view.View;
 public class Insert implements Command {
     private View view;
     private DBManager dbManager;
-    final static public String COMMAND = "insert";
+    final static private String COMMAND = "insert";
 
     public Insert(View view, DBManager dbManager) {
         this.view = view;
@@ -22,7 +22,7 @@ public class Insert implements Command {
     @Override
     public void execute(String command) {
         if (!isExecutable(command)) {
-            printError(command);
+            printError(view,command);
             return;
         }
         String[] cmdParams = command.split("\\|");
@@ -40,10 +40,6 @@ public class Insert implements Command {
                         "'%s'. The reason is: %s", tableName, e.getMessage()));
             }
         } else
-            printError(command);
-    }
-
-    private void printError(String command) {
-        view.write("Please enter a valid command");
+            printError(view,command);
     }
 }

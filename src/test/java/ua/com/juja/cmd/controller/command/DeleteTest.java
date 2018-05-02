@@ -39,7 +39,7 @@ public class DeleteTest {
     @Test
     public void testWrongCommand() {
         command.execute("delete|author");
-        verify(view).write("Please enter a valid command");
+        verify(view).write("Command 'delete|author' is not valid");
     }
 
     @Test

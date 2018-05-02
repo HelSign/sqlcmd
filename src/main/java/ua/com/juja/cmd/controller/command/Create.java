@@ -8,7 +8,7 @@ import java.util.Arrays;
 public class Create implements Command {
     private View view;
     private DBManager dbManager;
-    final static public String COMMAND = "create";
+    final static private String COMMAND = "create";
 
     public Create(View view, DBManager dbManager) {
         this.view = view;
@@ -25,12 +25,12 @@ public class Create implements Command {
         String[] input = command.split("\\|");
 
         if (input.length <= 2) {
-            printError(command);
+            printError(view,command);
             return;
         } else {
             String tableName = input[1].trim();
             if (tableName.length() == 0) {
-                printError(command);
+                printError(view,command);
                 return;
             }
             try {
@@ -46,10 +46,6 @@ public class Create implements Command {
                         "reason is: %s", tableName, e.getMessage()));
             }
         }
-    }
-
-    private void printError(String command) {
-        view.write("Please enter a valid command");
     }
 }
 
