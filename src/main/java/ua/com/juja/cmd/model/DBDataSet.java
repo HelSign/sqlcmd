@@ -35,12 +35,11 @@ public class DBDataSet implements DataSet {
 
     @Override
     public int hashCode() {
-        Set<String> names = ((DBDataSet) data).getNames();
+        Set<String> names = this.getNames();
         int hashCode = 0;
         for (String name : names) {
             try {
-                hashCode += name.hashCode() + ((DBDataSet) data).get(name)
-                        .hashCode();
+                hashCode += name.hashCode() + this.get(name).hashCode();
             } catch (Exception e) {
                 return 0;
             }
@@ -52,12 +51,12 @@ public class DBDataSet implements DataSet {
     public boolean equals(Object dataSet) {
         if (dataSet == null) return false;
         if (!(dataSet instanceof DBDataSet)) return false;
+        if (this == dataSet) return true;
 
-        Set<String> names = ((DBDataSet) data).getNames();
+        Set<String> names = this.getNames();
         for (String name : names) {
             try {
-                if (!((DBDataSet) data).get(name).equals(((DBDataSet) dataSet).get
-                        (name)))
+                if (!this.get(name).equals(((DBDataSet) dataSet).get(name)))
                     return false;
             } catch (Exception e) {
                 return false;
@@ -66,4 +65,8 @@ public class DBDataSet implements DataSet {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return Arrays.deepToString(data.keySet().toArray());
+    }
 }
