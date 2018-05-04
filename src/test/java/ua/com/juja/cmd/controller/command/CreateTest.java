@@ -6,6 +6,8 @@ import org.junit.Test;
 import ua.com.juja.cmd.model.DBManager;
 import ua.com.juja.cmd.view.View;
 
+import java.sql.SQLException;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -23,14 +25,9 @@ public class CreateTest {
     }
 
     @Test
-    public void testCreate() {
+    public void testCreate() throws SQLException {
         command.execute("create|author|name1|last_name");
-        try {
-            verify(dbManager).createTable("author", new String[]{"name1",
-                    "last_name"});
-        } catch (Exception e) {
-            view.write("Can't create table. The reason is: " + e.getMessage());
-        }
+        verify(dbManager).createTable("author", new String[]{"name1", "last_name"});
         verify(view).write("Table 'author' was successfully created");
     }
 

@@ -133,7 +133,7 @@ public class IntegrationTest {
                 "**** Table 'author' was successfully created\n" +
                 "**** 1 rows were successfully inserted into table 'author'\n" +
                 "**** 1 rows were successfully inserted into table 'author'\n" +
-                "**** 1 rows were updated in from table 'author'\n" +
+                "**** 1 rows were updated in table 'author'\n" +
                 "**** Table 'author' has following data\n" +
                 "**** [Jane, Rowling, 1963]\n" +
                 "**** [Stiven, King, 1950]\n" +

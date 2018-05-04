@@ -6,6 +6,8 @@ import org.junit.Test;
 import ua.com.juja.cmd.model.DBManager;
 import ua.com.juja.cmd.view.View;
 
+import java.sql.SQLException;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -15,7 +17,6 @@ public class ClearTest {
     View view;
     Command command;
 
-
     @Before
     public void setup() {
         dbManager = mock(DBManager.class);
@@ -24,13 +25,9 @@ public class ClearTest {
     }
 
     @Test
-    public void testClear() {
+    public void testClear() throws SQLException {
         command.execute("clear|books");
-        try {
             verify(dbManager).truncateTable("books");
-        } catch (Exception e) {
-            view.write("Can't clear table. The reason is: " + e.getMessage());
-        }
         verify(view).write("Table 'books' was successfully cleared");
     }
 

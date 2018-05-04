@@ -7,6 +7,8 @@ import ua.com.juja.cmd.model.DBDataSet;
 import ua.com.juja.cmd.model.DBManager;
 import ua.com.juja.cmd.view.View;
 
+import java.sql.SQLException;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -25,20 +27,17 @@ public class InsertTest {
     }
 
     @Test
-    public void testInsert() {
-        command.execute("insert|book|name|Harry Potter|author|J.K.Rowling|year|1998");
+    public void testInsert() throws SQLException {
+        //given
         DBDataSet testData = new DBDataSet();
         testData.put("name", "Harry Potter");
         testData.put("author", "J.K.Rowling");
         testData.put("year", "1998");
-        try {
-            verify(dbManager).insertRows("book", testData);
-        } catch (Exception e) {
-            view.write(String.format("Data wasn't inserted into table " +
-                    "'book'. The reason is: %s", e.getMessage()));
-        }
-       verify(view).write("0 rows were successfully inserted into table " +
-                "'book'");
+        //when
+        command.execute("insert|book|name|Harry Potter|author|J.K.Rowling|year|1998");
+        //then
+        verify(dbManager).insertRows("book", testData);
+        verify(view).write("0 rows were successfully inserted into table 'book'");
     }
 
     @Test
@@ -64,8 +63,22 @@ public class InsertTest {
     }
 
     @Test
-    public void testClearCommandNoParams() {
+    public void testInsertCommandNoParams() {
         command.execute("insert");
         verify(view).write("Command 'insert' is not valid");
+    }
+
+    @Test
+    public void testInsertWithSpaces() throws SQLException {
+        //given
+        DBDataSet testData = new DBDataSet();
+        testData.put("name", "Harry Potter");
+        testData.put("author", "J.K.Rowling");
+        testData.put("year", "1998");
+        //when
+        command.execute("insert | book| name|Harry Potter  |author|J.K.Rowling|year|1998");
+        //then
+        verify(dbManager).insertRows("book", testData);
+        verify(view).write("0 rows were successfully inserted into table 'book'");
     }
 }

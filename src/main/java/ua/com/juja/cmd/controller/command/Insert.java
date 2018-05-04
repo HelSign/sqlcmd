@@ -30,7 +30,7 @@ public class Insert implements Command {
             String tableName = cmdParams[1].trim();
             DBDataSet data = new DBDataSet();
             for (int i = 2; i < cmdParams.length; i++) {
-                data.put(cmdParams[i], cmdParams[++i]);
+                data.put(cmdParams[i].trim(), cmdParams[++i].trim());
             }
             try {
                 int num = dbManager.insertRows(tableName, data);

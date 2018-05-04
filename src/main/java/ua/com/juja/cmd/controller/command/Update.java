@@ -35,17 +35,17 @@ public class Update implements Command {
         }
         String tableName = cmdParams[1].trim();
         DBDataSet condition = new DBDataSet();
-        condition.put(cmdParams[2], cmdParams[3]);
+        condition.put(cmdParams[2].trim(), cmdParams[3].trim());
         DBDataSet data = new DBDataSet();
         for (int i = 4; i < cmdParams.length; i++) {
-            data.put(cmdParams[i], cmdParams[++i]);
+            data.put(cmdParams[i].trim(), cmdParams[++i].trim());
         }
         try {
             int num = dbManager.updateRows(tableName, condition, data);
             if (num == -1)
                 view.write(String.format("Data wasn't updated in table '%s'", tableName));
             else
-                view.write(String.format("%d rows were updated in from table '%s'", num, tableName));
+                view.write(String.format("%d rows were updated in table '%s'", num, tableName));
         } catch (Exception e) {
             view.write(String.format("Data wasn't updated in table '%s'", tableName));
             view.write(e.getMessage());

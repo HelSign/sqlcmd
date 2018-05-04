@@ -7,6 +7,8 @@ import org.junit.Test;
 import ua.com.juja.cmd.model.DBManager;
 import ua.com.juja.cmd.view.View;
 
+import java.sql.SQLException;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -25,13 +27,9 @@ public class DropTest {
     }
 
     @Test
-    public void testDrop() {
+    public void testDrop() throws SQLException {
         command.execute("drop|books");
-        try {
-            verify(dbManager).dropTable("books");
-        } catch (Exception e){
-        view.write("Can't delete table. The reason is: "+e.getMessage());
-    }
+        verify(dbManager).dropTable("books");
         verify(view).write("Table 'books' was successfully deleted");
     }
 

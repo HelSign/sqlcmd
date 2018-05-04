@@ -28,24 +28,22 @@ public class Delete implements Command {
             return;
         }
         String[] cmdParams = command.split("\\|");
-
-        if (cmdParams.length == 4 && cmdParams[1].trim().length() > 0) {
-            String tableName = cmdParams[1].trim();
-            DBDataSet data = new DBDataSet();
-            data.put(cmdParams[2], cmdParams[3]);
-
-            try {
-                int num = dbManager.deleteRows(tableName, data);
-                // if (num == -1)
-                //   view.write(String.format("Data wasn't deleted from
-                // table '%s'", tableName));
-                //else
-                view.write(String.format("%d rows were successfully  deleted from table '%s'", num, tableName));
-            } catch (Exception e) {
-                view.write(String.format("Data wasn't  deleted from table " +
-                        "'%s'.The reason is:%s", tableName, e));
-            }
-        } else
+        if (cmdParams.length != 4 || cmdParams[1].trim().length() < 1) {
             printError(view, command);
+            return;
+        }
+        String tableName = cmdParams[1].trim();
+        DBDataSet data = new DBDataSet();
+        data.put(cmdParams[2].trim(), cmdParams[3].trim());
+        try {
+            int num = dbManager.deleteRows(tableName, data);
+            if (num == -1)
+                view.write(String.format("Data wasn't deleted from table '%s'", tableName));
+            else
+                view.write(String.format("%d rows were successfully  deleted from table '%s'", num, tableName));
+        } catch (Exception e) {
+            view.write(String.format("Data wasn't  deleted from table '%s'.The reason is:%s", tableName, e));
+        }
+
     }
 }
