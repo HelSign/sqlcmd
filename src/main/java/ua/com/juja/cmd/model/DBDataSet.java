@@ -54,6 +54,9 @@ public class DBDataSet implements DataSet {
         if (this == dataSet) return true;
 
         Set<String> names = this.getNames();
+        Set<String> dataSetNames = ((DBDataSet) dataSet).getNames();
+        if(names.size()!=dataSetNames.size()) return false;
+
         for (String name : names) {
             try {
                 if (!this.get(name).equals(((DBDataSet) dataSet).get(name)))
