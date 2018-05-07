@@ -28,7 +28,7 @@ public abstract class DBManagerTest {
     abstract DBManager getDBManager();
 
     @Test
-    public void testIsConnected() {
+    public void testCheckIfConnected() {
         assertTrue(dbManager.isConnected());
     }
 //todo test

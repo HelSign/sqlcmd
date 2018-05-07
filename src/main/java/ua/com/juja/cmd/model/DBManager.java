@@ -8,6 +8,8 @@ public interface DBManager {
 
     void makeConnection(String dbName, String user, String password) throws SQLException;
 
+    void closeConnection() throws SQLException ;
+
     int createTable(String name, String[] columns) throws SQLException;
     //todo arraylist
 

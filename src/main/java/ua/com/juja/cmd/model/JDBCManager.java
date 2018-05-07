@@ -9,49 +9,34 @@ public class JDBCManager implements DBManager {
     private Connection connection;
 
     @Override
-    public void makeConnection(String dbName, String user, String password) { //todo refactor code below
-        if (connection != null) {
-            System.out.println("You have already been connected to your DB");
+    public void makeConnection(String dbName, String user, String password) {
+        if (connection != null)
             return;
-        }
-
-        Configuration configuration = new Configuration();
-        String url = configuration.getJDBCDriver() +
-                configuration.getServer() + ":" + configuration.getPort()
-                + "/" + dbName;
         try {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("PostgreSQL JDBC Driver is not in the library path!", e);
         }
+        Configuration configuration = new Configuration();
+        String url = configuration.getJDBCDriver() +
+                configuration.getServer() + ":" + configuration.getPort() + "/" + dbName;
         try {
             connection = DriverManager.getConnection(url, user, password);
         } catch (SQLException e) {
             throw new RuntimeException(String.format("Connection failed to " +
-                    "database: %s as user: %s , url: %s ", dbName, user, url),
-                    e);
-        }
-        if (connection != null) {
-            System.out.println("You are connected to your DB now!");
-        } else {
-            System.out.println("Failed to make connection!");
+                    "database: %s as user: %s , url: %s ", dbName, user, url), e);
         }
     }
 
     @Override
     public int createTable(String name, String[] columns) throws SQLException {
         checkIfConnected();
-
-        StringBuilder query = new StringBuilder();
-        query.append("CREATE TABLE " + name + " (");
+        StringBuilder query = new StringBuilder("CREATE TABLE " + name + " (");
         for (String col : columns) {
-            query.append(col);
-            query.append(" varchar(40),");
+            query.append(col).append(" varchar(40),");
         }
         //to remove last comma sign
-        query.deleteCharAt(query.length() - 1);
-        query.append( ")");
-
+        query.replace(query.length() - 1, query.length(), ")");
         try (Statement stmt = connection.createStatement()) {
             stmt.execute(query.toString());
         } catch (SQLException e) {
@@ -60,33 +45,28 @@ public class JDBCManager implements DBManager {
         return 1;
     }
 
-    private boolean closeConnection() {
+    @Override
+    public void closeConnection() throws SQLException {
         if (connection != null) {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                System.out.println("It's impossible to close DB connection");
-                e.printStackTrace();
-                return false;
-            }
-            return true;
-        } else return true;
+            if (!connection.getAutoCommit())
+                connection.commit();
+            connection.close();
+        }
     }
 
     @Override
     public int insertRows(String table, DataSet data) throws SQLException {
         checkIfConnected();
-
         Set<String> columns = data.getNames();
-        String columnsList = " (";
-        String valuesList = " (";
+        StringBuilder columnsList = new StringBuilder(" (");
+        StringBuilder valuesList = new StringBuilder(" (");
 
         for (String colName : columns) {
-            columnsList += colName + ",";
-            valuesList += String.format("'%s',", data.get(colName));
+            columnsList.append(colName + ",");
+            valuesList.append("'" + data.get(colName) + "',");
         }
-        columnsList = columnsList.substring(0, columnsList.length() - 1) + ")";
-        valuesList = valuesList.substring(0, valuesList.length() - 1) + ")";
+        columnsList.replace(columnsList.length() - 1, columnsList.length(), ")");
+        valuesList.replace(valuesList.length() - 1, valuesList.length(), ")");
         String query = String.format("INSERT INTO public.%1$s%2$s VALUES %3$s",
                 table, columnsList, valuesList);
         int numRows;
@@ -101,25 +81,18 @@ public class JDBCManager implements DBManager {
     @Override
     public int updateRows(String table, DataSet condition, DataSet data) {
         checkIfConnected();
-
-        String query = String.format("UPDATE public.%s SET ", table);
-
+        StringBuilder query = new StringBuilder(String.format("UPDATE public.%s SET ", table));
         Set<String> columns = data.getNames();
         for (String colName : columns) {
-            query = String.format(query + "%1$s='%2$s',", colName, data.get(colName));
+            query.append(String.format("%1$s='%2$s',", colName, data.get(colName)));
         }
-
-        if (query.endsWith(","))
-            query = query.substring(0, query.length() - 1);
-
-        query += " WHERE ";
-
+        query.replace(query.length() - 1, query.length(), " WHERE ");
         columns = condition.getNames();
         for (String colName : columns) {
-            query = String.format(query + "%1$s='%2$s'", colName, condition.get(colName));
+            query.append(String.format("%1$s='%2$s'", colName, condition.get(colName)));
         }
         try (Statement st = connection.createStatement()) {
-            return st.executeUpdate(query);
+            return st.executeUpdate(query.toString());
         } catch (SQLException e) {
             e.printStackTrace();
             return -1;
@@ -129,13 +102,11 @@ public class JDBCManager implements DBManager {
     @Override
     public int deleteRows(String table, DataSet data) {
         checkIfConnected();
-
         String query = "DELETE FROM public." + table + " WHERE ";
         Set<String> columns = data.getNames();
         for (String colName : columns) {
             query = String.format(query + "%1$s='%2$s'", colName, data.get(colName));
         }
-
         try (Statement st = connection.createStatement()) {
             return st.executeUpdate(query);
         } catch (SQLException e) {
@@ -147,7 +118,6 @@ public class JDBCManager implements DBManager {
     @Override
     public int truncateTable(String table) {
         checkIfConnected();
-
         String query = "TRUNCATE TABLE public." + table;
         try (Statement st = connection.createStatement()) {
             return st.executeUpdate(query);
@@ -160,7 +130,6 @@ public class JDBCManager implements DBManager {
     @Override
     public int dropTable(String table) throws SQLException {
         checkIfConnected();
-
         String query = "DROP TABLE public." + table;
         try (Statement st = connection.createStatement()) {
             st.execute(query);
@@ -171,14 +140,12 @@ public class JDBCManager implements DBManager {
     }
 
     @Override
-    public List<DataSet> getTableData(String tableName) {
+    public List<DataSet> getTableData(String tableName) throws SQLException {
         checkIfConnected();
-
         List<DataSet> result = new ArrayList<>();
         String query = "SELECT * FROM " + tableName;
         try (Statement st = connection.createStatement();
              ResultSet rs = st.executeQuery(query)) {
-
             ResultSetMetaData metaData = rs.getMetaData();
             int numColumns = metaData.getColumnCount();
             while (rs.next()) {
@@ -189,22 +156,18 @@ public class JDBCManager implements DBManager {
                 result.add(dataSet);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
+            throw e;
         }
         return result;
     }
 
     @Override
-    public Set<String> getTableColumns(String tableName) {
+    public Set<String> getTableColumns(String tableName) throws SQLException {
         checkIfConnected();
-
         Set<String> result = new LinkedHashSet<>();
         String query = "SELECT * FROM " + tableName;
-
         try (Statement st = connection.createStatement();
              ResultSet rs = st.executeQuery(query)) {
-
             ResultSetMetaData metaData = rs.getMetaData();
             int numColumns = metaData.getColumnCount();
             while (rs.next()) {
@@ -213,26 +176,25 @@ public class JDBCManager implements DBManager {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
+            throw e;
         }
         return result;
     }
 
 
     @Override
-    public String getTablesNames() {
+    public String getTablesNames() throws SQLException {
         checkIfConnected();
-
-        String query = "SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE'";
-        String result = "";
+        String query = "SELECT table_name FROM information_schema.tables WHERE table_schema='public' " +
+                "AND table_type='BASE TABLE'";
+        StringBuilder result = new StringBuilder();
         try (Statement st = connection.createStatement();
              ResultSet rs = st.executeQuery(query)) {
             while (rs.next()) {
-                result += rs.getString("table_name") + ",";
+                result.append(rs.getString("table_name")).append(",");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw e;
         }
         return result.substring(0, result.length() - 1);
     }
@@ -242,7 +204,7 @@ public class JDBCManager implements DBManager {
         return (connection != null);
     }
 
-    public void checkIfConnected() {
+    private void checkIfConnected() {
         if (connection == null) {
             throw new RuntimeException("Connection to DB is not established. Please connect to you DB");
         }

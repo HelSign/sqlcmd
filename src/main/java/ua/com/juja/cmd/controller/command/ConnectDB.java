@@ -28,20 +28,17 @@ public class ConnectDB implements Command {
             printError(view, command);
             return;
         }
-        String user;
-        String password;
-        String dbName;
         String[] cmdWithParams = command.split("\\|");
-        if (cmdWithParams.length == 4) {
-            user = cmdWithParams[2];
-            password = cmdWithParams[3];
-            dbName = cmdWithParams[1];
-        } else {
+        if (cmdWithParams.length != 4) {
             printError(view, command);
             return;
         }
+        String user = cmdWithParams[2].trim();
+        String password = cmdWithParams[3].trim();
+        String dbName = cmdWithParams[1].trim();
         try {
             dbManager.makeConnection(dbName, user, password);
+            view.write("You are connected to your DB now!");
         } catch (Exception e) {
             view.write("Please enter correct username and password. See detailed error message below\t");
             view.write(e.getMessage());

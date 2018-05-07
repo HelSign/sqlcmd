@@ -30,7 +30,7 @@ public class IntegrationTest {
     }
 
     @Test
-    public void testHelp() throws SQLException {
+    public void testHelp() {
         //given
         in.add("help");
         in.add("exit");
@@ -69,23 +69,23 @@ public class IntegrationTest {
     }
 
     @Test
-    public void testConnection() throws SQLException {
+    public void testConnection() {
         //given
-        in.add(connect());
+        in.add(connectCommand());
         in.add("exit");
         //when
         Main.main(new String[0]);
         //then
         String expected = "**** Hello! You are using SQLCmd application\n" +
                 "**** Please enter a command. For help use command help\n" +
-                "You are connected to your DB now!\n" +
+                "**** You are connected to your DB now!\n" +
                 "**** Are you sure you want to exit now? Never mind. It's " +
                 "done\n";
         assertEquals(expected.replaceAll("\\n", lineSeparator()), new String(out.toByteArray()));
     }
 
     @Test
-    public void testExit() throws SQLException {
+    public void testExit() {
         //given
         in.add("exit");
 
@@ -114,7 +114,7 @@ public class IntegrationTest {
 
     @Test
     public void testLifeCycle() {
-        in.add(connect());
+        in.add(connectCommand());
         in.add("create|author|name|last_name|birthday");
         in.add("insert|author|name|Jane|last_name|Rowling|birthday|1963");
         in.add("insert|author|name|Stiven|last_name|King|birthday|1955");
@@ -129,7 +129,7 @@ public class IntegrationTest {
         //then
         String expected = "**** Hello! You are using SQLCmd application\n" +
                 "**** Please enter a command. For help use command help\n" +
-                "You are connected to your DB now!\n" +
+                "**** You are connected to your DB now!\n" +
                 "**** Table 'author' was successfully created\n" +
                 "**** 1 rows were successfully inserted into table 'author'\n" +
                 "**** 1 rows were successfully inserted into table 'author'\n" +
@@ -146,7 +146,7 @@ public class IntegrationTest {
         assertEquals(expected.replaceAll("\\n", lineSeparator()), new String(out.toByteArray()));
     }
 
-    private String connect() {
+    private String connectCommand() {
         Configuration configuration = new Configuration();
         String dbName = configuration.getDbName();
         String user = configuration.getUser();
