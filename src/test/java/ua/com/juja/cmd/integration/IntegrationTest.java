@@ -135,8 +135,13 @@ public class IntegrationTest {
                 "**** 1 rows were successfully inserted into table 'author'\n" +
                 "**** 1 rows were updated in table 'author'\n" +
                 "**** Table 'author' has following data\n" +
-                "**** [Jane, Rowling, 1963]\n" +
-                "**** [Stiven, King, 1950]\n" +
+                "**** \n" +
+                "+--------------------+--------------------+--------------------+\n" +
+                "|name                |last_name           |birthday            |\n" +
+                "+--------------------+--------------------+--------------------+\n" +
+                "|Jane                |Rowling             |1963                |\n" +
+                "|Stiven              |King                |1950                |\n" +
+                "+--------------------+--------------------+--------------------+\n\n"+
                 "**** End data\n" +
                 "**** 1 rows were successfully  deleted from table 'author'\n" +
                 "**** Table 'author' was successfully cleared\n" +

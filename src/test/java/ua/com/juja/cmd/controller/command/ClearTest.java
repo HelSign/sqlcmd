@@ -12,7 +12,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 
-public class ClearTest {
+public class ClearTest {//todo some resource cleaning if requiered
     DBManager dbManager;
     View view;
     Command command;

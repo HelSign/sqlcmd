@@ -5,7 +5,7 @@ import ua.com.juja.cmd.controller.Configuration;
 import java.sql.*;
 import java.util.*;
 
-public class JDBCManager implements DBManager {
+public class JDBCManager implements DBManager {//todo check where i can use lambda and streams
     private Connection connection;
 
     @Override

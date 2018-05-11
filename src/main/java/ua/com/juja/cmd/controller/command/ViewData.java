@@ -37,10 +37,13 @@ public class ViewData implements Command {
                     view.write(String.format("Can't show data of '%s' table", tableName));
                 else {
                     view.write(String.format("Table '%s' has following data", tableName));
-                    for (DataSet dataSet : result) {
+                 /*   for (DataSet dataSet : result) {
                         view.write(dataSet.getValues().toString());
                     }
-                    view.write("End data");
+                 */
+
+                 view.write(TableGenerator.table(result,dbManager.getTableColumns(tableName)));
+                 view.write("End data");
                 }
             } catch (Exception e) {
                 view.write(String.format("Can't show data of '%s' table", tableName));

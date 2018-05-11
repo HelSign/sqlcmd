@@ -10,7 +10,7 @@ public class Controller {
 
     public Controller(DBManager dbManager, View view) {
         this.view = view;
-        this.commands = new Command[]{
+        this.commands = new Command[]{//todo list
                 new Help(view),
                 new ConnectDB(view, dbManager),
                 new Create(view, dbManager),
