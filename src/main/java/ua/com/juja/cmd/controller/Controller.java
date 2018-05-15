@@ -1,28 +1,30 @@
 package ua.com.juja.cmd.controller;
 
+import ua.com.juja.cmd.controller.command.*;
 import ua.com.juja.cmd.model.DBManager;
 import ua.com.juja.cmd.view.View;
-import ua.com.juja.cmd.controller.command.*;
+
+import java.util.ArrayList;
 
 public class Controller {
     private View view;
-    private Command[] commands;
+    private ArrayList<Command> commands;
 
     public Controller(DBManager dbManager, View view) {
         this.view = view;
-        this.commands = new Command[]{//todo list
-                new Help(view),
-                new ConnectDB(view, dbManager),
-                new Create(view, dbManager),
-                new Drop(view, dbManager),
-                new Tables(view, dbManager),
-                new Clear(view, dbManager),
-                new Insert(view, dbManager),
-                new Update(view, dbManager),
-                new ViewData(view, dbManager),
-                new Delete(view, dbManager),
-                new Exit(view,dbManager),
-                new Unsupported(view)};
+        commands = new ArrayList<Command>();
+        commands.add(new Help(view));
+        commands.add(new ConnectDB(view, dbManager));
+        commands.add(new Create(view, dbManager));
+        commands.add(new Drop(view, dbManager));
+        commands.add(new Tables(view, dbManager));
+        commands.add(new Clear(view, dbManager));
+        commands.add(new Insert(view, dbManager));
+        commands.add(new Update(view, dbManager));
+        commands.add(new ViewData(view, dbManager));
+        commands.add(new Delete(view, dbManager));
+        commands.add(new Exit(view, dbManager));
+        commands.add(new Unsupported(view));
     }
 
     public void run() {

@@ -10,8 +10,7 @@ public interface DBManager {
 
     void closeConnection() throws SQLException ;
 
-    int createTable(String name, String[] columns) throws SQLException;
-    //todo arraylist
+    int createTable(String name, Set<String> columns) throws SQLException;
 
     int insertRows(String table, DataSet data) throws SQLException;
 

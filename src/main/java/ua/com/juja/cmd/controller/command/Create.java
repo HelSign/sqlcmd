@@ -3,7 +3,8 @@ package ua.com.juja.cmd.controller.command;
 import ua.com.juja.cmd.model.DBManager;
 import ua.com.juja.cmd.view.View;
 
-import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class Create implements Command {
     private View view;
@@ -23,29 +24,29 @@ public class Create implements Command {
     @Override
     public void execute(String command) {
         String[] input = command.split("\\|");
-
         if (input.length <= 2) {
-            printError(view,command);
+            printError(view, command);
             return;
-        } else {
-            String tableName = input[1].trim();
-            if (tableName.length() == 0) {
-                printError(view,command);
-                return;
-            }
-            try {
-                String[] columns = Arrays.copyOfRange(input, 2, input.length);
-                for (int i = 0; i < columns.length; i++) {
-                    columns[i] = columns[i].trim();
-                }
-                dbManager.createTable(tableName, columns);
-                view.write(String.format("Table '%s' was successfully created",
-                        tableName));
-            } catch (Exception e) {
-                view.write(String.format("Table '%s' wasn't created. The " +
-                        "reason is: %s", tableName, e.getMessage()));
-            }
         }
+        String tableName = input[1].trim();
+        if (tableName.length() == 0) {
+            printError(view, command);
+            return;
+        }
+        int result = -1;
+        try {
+            Set<String> columns = new LinkedHashSet<String>();
+            for (int i = 2; i < input.length; i++) {
+                columns.add(input[i].trim());
+            }
+            result = dbManager.createTable(tableName, columns);
+            view.write(String.format("Table '%s' was successfully created", tableName));
+        } catch (Exception e) {
+            view.write(String.format("Table '%s' wasn't created. The reason is: %s", tableName, e.getMessage()));
+        }
+        if (result == -1)
+            view.write(String.format("Table '%s' wasn't created. Please see the reason in logs", tableName));
+
     }
 }
 

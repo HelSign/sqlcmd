@@ -7,6 +7,8 @@ import ua.com.juja.cmd.model.DBManager;
 import ua.com.juja.cmd.view.View;
 
 import java.sql.SQLException;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -27,7 +29,10 @@ public class CreateTest {
     @Test
     public void testCreate() throws SQLException {
         command.execute("create|author|name1|last_name");
-        verify(dbManager).createTable("author", new String[]{"name1", "last_name"});
+        Set<String> columns = new LinkedHashSet<String>();
+        columns.add("name1");
+        columns.add("last_name");
+        verify(dbManager).createTable("author", columns);
         verify(view).write("Table 'author' was successfully created");
     }
 

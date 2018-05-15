@@ -1,8 +1,8 @@
 package ua.com.juja.cmd.controller.command;
 
 import ua.com.juja.cmd.model.DBManager;
-import ua.com.juja.cmd.view.View;
 import ua.com.juja.cmd.model.DataSet;
+import ua.com.juja.cmd.view.View;
 
 import java.util.List;
 
@@ -37,13 +37,8 @@ public class ViewData implements Command {
                     view.write(String.format("Can't show data of '%s' table", tableName));
                 else {
                     view.write(String.format("Table '%s' has following data", tableName));
-                 /*   for (DataSet dataSet : result) {
-                        view.write(dataSet.getValues().toString());
-                    }
-                 */
-
-                 view.write(TableGenerator.table(result,dbManager.getTableColumns(tableName)));
-                 view.write("End data");
+                    view.write(TableGenerator.table(result, dbManager.getTableColumns(tableName)));
+                    view.write("End data");
                 }
             } catch (Exception e) {
                 view.write(String.format("Can't show data of '%s' table", tableName));

@@ -2,7 +2,7 @@ package ua.com.juja.cmd.controller.command;
 
 import ua.com.juja.cmd.view.View;
 
-public class Help implements Command {
+public class Help implements Command {//todo enum
     private View view;
     final static private String COMMAND = "help";
 

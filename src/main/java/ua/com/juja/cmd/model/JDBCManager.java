@@ -3,10 +3,16 @@ package ua.com.juja.cmd.model;
 import ua.com.juja.cmd.controller.Configuration;
 
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 public class JDBCManager implements DBManager {//todo check where i can use lambda and streams
     private Connection connection;
+
+    public JDBCManager() {
+    }
 
     @Override
     public void makeConnection(String dbName, String user, String password) {
@@ -22,14 +28,14 @@ public class JDBCManager implements DBManager {//todo check where i can use lamb
                 configuration.getServer() + ":" + configuration.getPort() + "/" + dbName;
         try {
             connection = DriverManager.getConnection(url, user, password);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             throw new RuntimeException(String.format("Connection failed to " +
                     "database: %s as user: %s , url: %s ", dbName, user, url), e);
         }
     }
 
     @Override
-    public int createTable(String name, String[] columns) throws SQLException {
+    public int createTable(String name, Set<String> columns) {
         checkIfConnected();
         StringBuilder query = new StringBuilder("CREATE TABLE " + name + " (");
         for (String col : columns) {
@@ -40,7 +46,8 @@ public class JDBCManager implements DBManager {//todo check where i can use lamb
         try (Statement stmt = connection.createStatement()) {
             stmt.execute(query.toString());
         } catch (SQLException e) {
-            throw e;
+            e.printStackTrace();
+            return -1;
         }
         return 1;
     }
@@ -55,15 +62,15 @@ public class JDBCManager implements DBManager {//todo check where i can use lamb
     }
 
     @Override
-    public int insertRows(String table, DataSet data) throws SQLException {
+    public int insertRows(String table, DataSet data) {
         checkIfConnected();
         Set<String> columns = data.getNames();
         StringBuilder columnsList = new StringBuilder(" (");
         StringBuilder valuesList = new StringBuilder(" (");
 
         for (String colName : columns) {
-            columnsList.append(colName + ",");
-            valuesList.append("'" + data.get(colName) + "',");
+            columnsList.append(colName).append(",");
+            valuesList.append("'").append(data.get(colName)).append("',");
         }
         columnsList.replace(columnsList.length() - 1, columnsList.length(), ")");
         valuesList.replace(valuesList.length() - 1, valuesList.length(), ")");
@@ -73,7 +80,8 @@ public class JDBCManager implements DBManager {//todo check where i can use lamb
         try (Statement st = connection.createStatement()) {
             numRows = st.executeUpdate(query);
         } catch (SQLException e) {
-            throw e;
+            e.printStackTrace();
+            return -1;
         }
         return numRows;
     }
@@ -91,12 +99,14 @@ public class JDBCManager implements DBManager {//todo check where i can use lamb
         for (String colName : columns) {
             query.append(String.format("%1$s='%2$s'", colName, condition.get(colName)));
         }
+        int numRows = -1;
         try (Statement st = connection.createStatement()) {
-            return st.executeUpdate(query.toString());
+            numRows = st.executeUpdate(query.toString());
         } catch (SQLException e) {
             e.printStackTrace();
             return -1;
         }
+        return numRows;
     }
 
     @Override
@@ -128,13 +138,14 @@ public class JDBCManager implements DBManager {//todo check where i can use lamb
     }
 
     @Override
-    public int dropTable(String table) throws SQLException {
+    public int dropTable(String table) {
         checkIfConnected();
         String query = "DROP TABLE public." + table;
         try (Statement st = connection.createStatement()) {
             st.execute(query);
         } catch (SQLException e) {
-            throw e;
+            e.printStackTrace();
+            return -1;
         }
         return 1;
     }

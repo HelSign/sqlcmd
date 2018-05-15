@@ -3,7 +3,7 @@ package ua.com.juja.cmd.controller.command;
 import ua.com.juja.cmd.model.DBManager;
 import ua.com.juja.cmd.view.View;
 
-public class ConnectDB implements Command {
+public class ConnectDB implements Command {//todo javadocs
     private View view;
     private DBManager dbManager;
     final static private String COMMAND = "connect";

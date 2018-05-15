@@ -40,8 +40,8 @@ public class DBDataSet implements DataSet {
         for (String name : names) {
             try {
                 hashCode += name.hashCode() + this.get(name).hashCode();
-            } catch (Exception e) {
-                return 0;
+            } catch (NullPointerException e) {
+                hashCode +=0;
             }
         }
         return hashCode;

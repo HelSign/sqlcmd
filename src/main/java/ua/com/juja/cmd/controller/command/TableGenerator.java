@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 
-public class TableGenerator {
+public class TableGenerator {//todo test
     private static final String SEPARATOR = "|";
     private static final String HSEPARATOR = "+";
     private static final int COLUMN_SIZE = 20;

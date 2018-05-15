@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class SqlCmdInputStream extends InputStream {
-    String input;
+    private String input;
     private boolean endLine = false;
 
     @Override
-    public int read() throws IOException {
+    public int read() {
         if (input.length() == 0) {
             return -1;
         }

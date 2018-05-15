@@ -12,7 +12,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 
-public class ClearTest {//todo some resource cleaning if requiered
+public class ClearTest {
     DBManager dbManager;
     View view;
     Command command;
@@ -39,8 +39,8 @@ public class ClearTest {//todo some resource cleaning if requiered
 
     @Test
     public void testClearWrongCommand() {
-        command.execute("cclear|books");
-        verify(view).write("Command 'cclear|books' is not valid");
+        command.execute("something|books");
+        verify(view).write("Command 'something|books' is not valid");
     }
 
     @Test
@@ -50,7 +50,7 @@ public class ClearTest {//todo some resource cleaning if requiered
 
     @Test
     public void testIsNotExecutable() {
-        Assert.assertFalse(command.isExecutable("cclear|books"));
+        Assert.assertFalse(command.isExecutable("something|books"));
     }
 
     @Test

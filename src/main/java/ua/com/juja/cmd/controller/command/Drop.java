@@ -27,13 +27,15 @@ public class Drop implements Command {
         String[] cmdParams = command.split("\\|");
         if (cmdParams.length == 2 && cmdParams[1].trim().length() > 0) {
             String tableName = cmdParams[1].trim();
+            int result = -1;
             try {
-                dbManager.dropTable(tableName);
+                result = dbManager.dropTable(tableName);
                 view.write(String.format("Table '%s' was successfully deleted", tableName));
             } catch (Exception e) {
-                view.write(String.format("Table '%s' wasn't deleted. The " +
-                        "reason is: %s", tableName, e.getMessage()));
+                view.write(String.format("Table '%s' wasn't deleted. The reason is: %s", tableName, e.getMessage()));
             }
+            if (result == -1)
+                view.write(String.format("Table '%s' wasn't deleted. Please see the reason in logs", tableName));
         } else
             printError(view, command);
     }

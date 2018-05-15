@@ -1,32 +1,35 @@
 package ua.com.juja.cmd.integration;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import ua.com.juja.cmd.controller.Configuration;
 import ua.com.juja.cmd.controller.Main;
-import ua.com.juja.cmd.model.DBManager;
-import ua.com.juja.cmd.model.JDBCManager;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
-import java.sql.SQLException;
 
 import static java.lang.System.lineSeparator;
 import static org.junit.Assert.assertEquals;
 
 public class IntegrationTest {
-    DBManager dbManager;
     private ByteArrayOutputStream out;
     private SqlCmdInputStream in;
 
 
     @Before
     public void setup() {
-        dbManager = new JDBCManager();
         out = new ByteArrayOutputStream();
         in = new SqlCmdInputStream();
         System.setOut(new PrintStream(out));
         System.setIn(in);
+    }
+
+    @After
+    public void release() throws IOException {
+        out.close();
+        in.close();
     }
 
     @Test
@@ -36,7 +39,6 @@ public class IntegrationTest {
         in.add("exit");
         //when
         Main.main(new String[0]);
-
         //then
         String expected = "**** Hello! You are using SQLCmd application\n" +
                 "**** Please enter a command. For help use command help\n" +
@@ -84,11 +86,28 @@ public class IntegrationTest {
         assertEquals(expected.replaceAll("\\n", lineSeparator()), new String(out.toByteArray()));
     }
 
+    @Test //todo how to  avoid warning
+    public void testConnectionWrongPassword()  {
+        //given
+        in.add(connectCommand()+"wrong");
+        in.add("exit");
+        //when
+        Main.main(new String[0]);
+        //then
+        String expected = "**** Hello! You are using SQLCmd application\n" +
+                "**** Please enter a command. For help use command help\n" +
+                "**** Please enter correct username and password. See detailed error message below\t\n" +
+                "**** Connection failed to database: sqlcmd as user: postgres , url: " +
+                "jdbc:postgresql://127.0.0.1:5432/sqlcmd \n" +
+                "**** Are you sure you want to exit now? Never mind. It's " +
+                "done\n";
+        assertEquals(expected.replaceAll("\\n", lineSeparator()), new String(out.toByteArray()));
+    }
+
     @Test
     public void testExit() {
         //given
         in.add("exit");
-
         //when
         Main.main(new String[0]);
         //then
@@ -141,7 +160,7 @@ public class IntegrationTest {
                 "+--------------------+--------------------+--------------------+\n" +
                 "|Jane                |Rowling             |1963                |\n" +
                 "|Stiven              |King                |1950                |\n" +
-                "+--------------------+--------------------+--------------------+\n\n"+
+                "+--------------------+--------------------+--------------------+\n\n" +
                 "**** End data\n" +
                 "**** 1 rows were successfully  deleted from table 'author'\n" +
                 "**** Table 'author' was successfully cleared\n" +
