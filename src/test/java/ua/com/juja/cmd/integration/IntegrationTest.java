@@ -1,8 +1,9 @@
 package ua.com.juja.cmd.integration;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import ua.com.juja.cmd.controller.Configuration;
 import ua.com.juja.cmd.controller.Main;
 
@@ -11,22 +12,24 @@ import java.io.IOException;
 import java.io.PrintStream;
 
 import static java.lang.System.lineSeparator;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class IntegrationTest {
     private ByteArrayOutputStream out;
     private SqlCmdInputStream in;
+    private Configuration configuration;
 
-
-    @Before
+    @BeforeEach
     public void setup() {
         out = new ByteArrayOutputStream();
         in = new SqlCmdInputStream();
         System.setOut(new PrintStream(out));
         System.setIn(in);
+        configuration = new Configuration();
+
     }
 
-    @After
+    @AfterEach
     public void release() throws IOException {
         out.close();
         in.close();
@@ -66,8 +69,7 @@ public class IntegrationTest {
                 "****  To exit\n" +
                 "****     'exit'\n" +
                 "**** Are you sure you want to exit now? Never mind. It's done\n";
-        assertEquals(expected.replaceAll("\\n", lineSeparator()),
-                new String(out.toByteArray()));
+        assertEquals(expected.replaceAll("\\n", lineSeparator()), new String(out.toByteArray()));
     }
 
     @Test
@@ -87,20 +89,20 @@ public class IntegrationTest {
     }
 
     @Test //todo how to  avoid warning
-    public void testConnectionWrongPassword()  {
+    public void testConnectionWrongPassword() {
         //given
-        in.add(connectCommand()+"wrong");
+        in.add(connectCommand() + "wrong");
         in.add("exit");
         //when
         Main.main(new String[0]);
         //then
-        String expected = "**** Hello! You are using SQLCmd application\n" +
-                "**** Please enter a command. For help use command help\n" +
-                "**** Please enter correct username and password. See detailed error message below\t\n" +
-                "**** Connection failed to database: sqlcmd as user: postgres , url: " +
-                "jdbc:postgresql://127.0.0.1:5432/sqlcmd \n" +
-                "**** Are you sure you want to exit now? Never mind. It's " +
-                "done\n";
+        String expected = String.format("**** Hello! You are using SQLCmd application\n" +
+                        "**** Please enter a command. For help use command help\n" +
+                        "**** Please enter correct username and password. See detailed error message below\t\n" +
+                        "**** Connection failed to database: %s as user: %s , url: %s \n" +
+                        "**** Are you sure you want to exit now? Never mind. It's done\n",
+                configuration.getDbName(), configuration.getUser(), configuration.getUrl());
+
         assertEquals(expected.replaceAll("\\n", lineSeparator()), new String(out.toByteArray()));
     }
 
@@ -171,7 +173,6 @@ public class IntegrationTest {
     }
 
     private String connectCommand() {
-        Configuration configuration = new Configuration();
         String dbName = configuration.getDbName();
         String user = configuration.getUser();
         String password = configuration.getPassword();

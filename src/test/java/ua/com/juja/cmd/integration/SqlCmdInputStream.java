@@ -1,7 +1,7 @@
 package ua.com.juja.cmd.integration;
 
-import java.io.IOException;
 import java.io.InputStream;
+
 
 public class SqlCmdInputStream extends InputStream {
     private String input;

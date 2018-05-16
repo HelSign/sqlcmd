@@ -1,7 +1,7 @@
 package ua.com.juja.cmd.model;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 public class DBDataSetTest {
     private DataSet dataSet;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         dataSet = new DBDataSet();
         dataSet.put("name1", "value1");

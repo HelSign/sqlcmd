@@ -1,15 +1,15 @@
 package ua.com.juja.cmd.controller.command;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import ua.com.juja.cmd.model.DBDataSet;
 import ua.com.juja.cmd.model.DBManager;
 import ua.com.juja.cmd.view.View;
 
 import java.sql.SQLException;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -18,7 +18,7 @@ public class UpdateTest {
     View view;
     Command command;
 
-    @Before
+    @BeforeEach
     public void setup() {
         dbManager = mock(DBManager.class);
         view = mock(View.class);

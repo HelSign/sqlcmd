@@ -1,8 +1,8 @@
 package ua.com.juja.cmd.model;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import ua.com.juja.cmd.controller.Configuration;
 import ua.com.juja.cmd.view.Console;
 
@@ -11,14 +11,14 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public abstract class DBManagerTest {
     private DBManager dbManager;
     private Console view;
 
-    @Before
+    @BeforeEach
     public void setup() {
         dbManager = getDBManager();
         try {
@@ -33,7 +33,7 @@ public abstract class DBManagerTest {
         }
     }
 
-    @After
+    @AfterEach
     public void release() throws SQLException {
         dropTable();
         dbManager.closeConnection();

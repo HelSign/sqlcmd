@@ -1,10 +1,10 @@
 package ua.com.juja.cmd.controller.command;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import ua.com.juja.cmd.view.View;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -14,7 +14,7 @@ public class UnsupportedTest {
     Command command;
 
 
-    @Before
+    @BeforeEach
     public void setup() {
         view = mock(View.class);
         command = new Unsupported(view);
@@ -29,7 +29,7 @@ public class UnsupportedTest {
 
     @Test
     public void testIsExecutable() {
-        Assert.assertTrue(command.isExecutable("sd"));
+        assertTrue(command.isExecutable("sd"));
     }
 
 }

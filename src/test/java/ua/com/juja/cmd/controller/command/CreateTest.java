@@ -1,8 +1,7 @@
 package ua.com.juja.cmd.controller.command;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import ua.com.juja.cmd.model.DBManager;
 import ua.com.juja.cmd.view.View;
 
@@ -10,6 +9,8 @@ import java.sql.SQLException;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -19,7 +20,7 @@ public class CreateTest {
     View view;
     Command command;
 
-    @Before
+    @BeforeEach
     public void setup() {
         dbManager = mock(DBManager.class);
         view = mock(View.class);
@@ -50,12 +51,12 @@ public class CreateTest {
 
     @Test
     public void testIsExecutable() {
-        Assert.assertTrue(command.isExecutable("create|author|name|last_name"));
+        assertTrue(command.isExecutable("create|author|name|last_name"));
     }
 
     @Test
     public void testIsNotExecutable() {
-        Assert.assertFalse(command.isExecutable("ccreate|author|name|last_name"));
+        assertFalse(command.isExecutable("ccreate|author|name|last_name"));
     }
 
     @Test

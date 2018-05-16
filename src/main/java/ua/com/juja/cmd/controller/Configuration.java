@@ -41,4 +41,8 @@ public class Configuration {
     public String getPort() {
         return properties.getProperty("database.port");
     }
+
+    public String getUrl() {
+        return getJDBCDriver() + getServer() + ":" + getPort() + "/" + getDbName();
+    }
 }

@@ -1,15 +1,15 @@
 package ua.com.juja.cmd.model;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import ua.com.juja.cmd.view.Console;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 public class ConsoleTest {
@@ -18,13 +18,13 @@ public class ConsoleTest {
     private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
     ByteArrayInputStream inContent;
 
-    @Before
+    @BeforeEach
     public void setUpStreams() {
         System.setOut(new PrintStream(outContent));
         System.setErr(new PrintStream(errContent));
     }
 
-    @After
+    @AfterEach
     public void restoreStreams() {
         System.setOut(System.out);
         System.setErr(System.err);
