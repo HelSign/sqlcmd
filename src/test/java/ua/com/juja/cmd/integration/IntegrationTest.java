@@ -9,6 +9,7 @@ import ua.com.juja.cmd.controller.Main;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
 
 import static java.lang.System.lineSeparator;
@@ -16,15 +17,21 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class IntegrationTest {
     private ByteArrayOutputStream out;
+    private ByteArrayOutputStream err;
     private SqlCmdInputStream in;
     private Configuration configuration;
+    private final InputStream originalIn = System.in;
+    private final PrintStream originalOut = System.out;
+    private final PrintStream originalErr = System.err;
 
     @BeforeEach
     public void setup() {
         out = new ByteArrayOutputStream();
+        err = new ByteArrayOutputStream();
         in = new SqlCmdInputStream();
         System.setOut(new PrintStream(out));
         System.setIn(in);
+        System.setErr(new PrintStream(err));
         configuration = new Configuration();
 
     }
@@ -33,6 +40,10 @@ public class IntegrationTest {
     public void release() throws IOException {
         out.close();
         in.close();
+        err.close();
+        System.setIn(originalIn);
+        System.setOut(originalOut);
+        System.setErr(originalErr);
     }
 
     @Test
@@ -88,7 +99,7 @@ public class IntegrationTest {
         assertEquals(expected.replaceAll("\\n", lineSeparator()), new String(out.toByteArray()));
     }
 
-    @Test //todo how to  avoid warning
+    @Test
     public void testConnectionWrongPassword() {
         //given
         in.add(connectCommand() + "wrong");
@@ -102,7 +113,6 @@ public class IntegrationTest {
                         "**** Connection failed to database: %s as user: %s , url: %s \n" +
                         "**** Are you sure you want to exit now? Never mind. It's done\n",
                 configuration.getDbName(), configuration.getUser(), configuration.getUrl());
-
         assertEquals(expected.replaceAll("\\n", lineSeparator()), new String(out.toByteArray()));
     }
 
