@@ -1,17 +1,15 @@
 package ua.com.juja.cmd.controller.command;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ua.com.juja.cmd.model.DBManager;
 import ua.com.juja.cmd.view.View;
 
-public class Tables implements Command {
-    private View view;
-    private DBManager dbManager;
-
-    final static private String COMMAND = "tables";
+public class Tables extends GeneralCommand {
+    public final static String COMMAND = "tables";
 
     public Tables(View view, DBManager dbManager) {
-        this.view = view;
-        this.dbManager = dbManager;
+        super(view, dbManager);
     }
 
     @Override
@@ -21,11 +19,14 @@ public class Tables implements Command {
 
     @Override
     public void execute(String command) {
+        LOG.traceEntry();
         try {
             view.write(dbManager.getTablesNames());
         } catch (Exception e) {
+            LOG.error("", e);
             view.write("Can't print tables names. The reason is :");
             view.write(e.getMessage());
         }
+        LOG.traceExit();
     }
 }

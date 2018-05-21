@@ -1,16 +1,17 @@
 package ua.com.juja.cmd.controller.command;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ua.com.juja.cmd.model.DBManager;
 import ua.com.juja.cmd.view.View;
 
-public class ConnectDB implements Command {//todo javadocs
-    private View view;
-    private DBManager dbManager;
-    final static private String COMMAND = "connect";
+import java.util.Arrays;
+
+public class ConnectDB extends GeneralCommand {//todo javadocs
+    private final static String COMMAND = "connect";
 
     public ConnectDB(View view, DBManager dbManager) {
-        this.view = view;
-        this.dbManager = dbManager;
+        super(view, dbManager);
     }
 
     @Override
@@ -20,17 +21,19 @@ public class ConnectDB implements Command {//todo javadocs
 
     @Override
     public void execute(String command) {
+        LOG.traceEntry();
         connectToDB(command);
+        LOG.traceExit();
     }
 
     private void connectToDB(String command) {
         if (!isExecutable(command)) {
-            printError(view, command);
+            notValidMessage(command);
             return;
         }
         String[] cmdWithParams = command.split("\\|");
         if (cmdWithParams.length != 4) {
-            printError(view, command);
+            notValidMessage(command);
             return;
         }
         String user = cmdWithParams[2].trim();
@@ -42,6 +45,7 @@ public class ConnectDB implements Command {//todo javadocs
         } catch (Exception e) {
             view.write("Please enter correct username and password. See detailed error message below\t");
             view.write(e.getMessage());
+            LOG.error("",e);
         }
     }
 }

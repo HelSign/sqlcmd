@@ -6,8 +6,4 @@ public interface Command {
     boolean isExecutable(String command);
 
     void execute(String command);
-
-    default void printError(View view, String command) {
-        view.write("Command '" + command + "' is not valid");
-    }
 }

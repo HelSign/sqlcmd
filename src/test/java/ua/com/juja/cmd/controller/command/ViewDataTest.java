@@ -31,7 +31,7 @@ public class ViewDataTest {
 
         //then
         verify(dbManager).getTableData("book");
-        verify(view).write("Table 'book' has following data");
+        verify(view).write("Table 'book' has no data");
     }
 
     @Test

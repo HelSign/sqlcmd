@@ -34,7 +34,7 @@ public class ConsoleTest {
     @Test
     public void testWrite() {
         console.write("hello");
-        assertEquals("**** hello"+System.lineSeparator(), outContent.toString());
+        assertEquals("hello"+System.lineSeparator(), outContent.toString());
 
     }
 

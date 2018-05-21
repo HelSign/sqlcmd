@@ -1,14 +1,20 @@
 package ua.com.juja.cmd.controller;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ua.com.juja.cmd.controller.command.*;
 import ua.com.juja.cmd.model.DBManager;
 import ua.com.juja.cmd.view.View;
 
 import java.util.ArrayList;
 
+/**
+ *
+ */
 public class Controller {
     private View view;
     private ArrayList<Command> commands;
+    private final static Logger LOG = LogManager.getLogger();
 
     public Controller(DBManager dbManager, View view) {
         this.view = view;
@@ -24,10 +30,11 @@ public class Controller {
         commands.add(new ViewData(view, dbManager));
         commands.add(new Delete(view, dbManager));
         commands.add(new Exit(view, dbManager));
-        commands.add(new Unsupported(view));
+        commands.add(new Unsupported(view, dbManager));
     }
 
     public void run() {
+        LOG.traceEntry();
         view.write("Hello! You are using SQLCmd application");
         view.write("Please enter a command. For help use command help");
         try {
@@ -43,11 +50,15 @@ public class Controller {
                 } catch (Exception e) {
                     if (e instanceof ExitException)
                         throw e;
-                    view.write(e.getMessage());
+                    else {
+                        LOG.warn(e);
+                        view.write(e.getMessage());
+                    }
                     break;
                 }
             }
-        } catch (ExitException e) { //do nothing
+        } catch (ExitException e) {
+            LOG.traceExit();
         }
     }
 }

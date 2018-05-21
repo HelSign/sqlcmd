@@ -1,12 +1,14 @@
 package ua.com.juja.cmd.controller.command;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import ua.com.juja.cmd.model.DBManager;
 import ua.com.juja.cmd.view.View;
 
-public class Unsupported implements Command {
-    private View view;
+public class Unsupported extends GeneralCommand {
 
-    public Unsupported(View view) {
-        this.view = view;
+    public Unsupported(View view, DBManager dbManager) {
+        super(view, dbManager);
     }
 
     @Override
@@ -16,6 +18,6 @@ public class Unsupported implements Command {
 
     @Override
     public void execute(String command) {
-        printError(view, command);
+        notValidMessage(command);
     }
 }

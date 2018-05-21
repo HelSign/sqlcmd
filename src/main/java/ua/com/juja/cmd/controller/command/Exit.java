@@ -1,18 +1,17 @@
 package ua.com.juja.cmd.controller.command;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ua.com.juja.cmd.model.DBManager;
 import ua.com.juja.cmd.view.View;
 
 import java.sql.SQLException;
 
-public class Exit implements Command {
-    private final DBManager dbManager;
-    private View view;
-    final static private String COMMAND = "exit";
+public class Exit extends GeneralCommand {
+    public final static String COMMAND = "exit";
 
     public Exit(View view, DBManager dbManager) {
-        this.view = view;
-        this.dbManager = dbManager;
+        super(view, dbManager);
     }
 
     @Override
@@ -22,12 +21,15 @@ public class Exit implements Command {
 
     @Override
     public void execute(String command) {
+        LOG.traceEntry();
         view.write("Are you sure you want to exit now? Never mind. It's done");
         try {
             dbManager.closeConnection();
         } catch (SQLException e) {
+            LOG.error("", e);
             view.write(e.getMessage());
         }
+        LOG.traceExit();
         throw new ExitException();
     }
 }

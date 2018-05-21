@@ -1,8 +1,12 @@
 package ua.com.juja.cmd.model;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.*;
 
 public class DBDataSet implements DataSet {
+    private final static Logger LOG = LogManager.getLogger();
     private Map<String, Object> data = new LinkedHashMap<>();
 
     @Override
@@ -41,7 +45,7 @@ public class DBDataSet implements DataSet {
             try {
                 hashCode += name.hashCode() + this.get(name).hashCode();
             } catch (NullPointerException e) {
-                hashCode +=0;
+                hashCode += 0;
             }
         }
         return hashCode;
@@ -55,13 +59,14 @@ public class DBDataSet implements DataSet {
 
         Set<String> names = this.getNames();
         Set<String> dataSetNames = ((DBDataSet) dataSet).getNames();
-        if(names.size()!=dataSetNames.size()) return false;
+        if (names.size() != dataSetNames.size()) return false;
 
         for (String name : names) {
             try {
                 if (!this.get(name).equals(((DBDataSet) dataSet).get(name)))
                     return false;
             } catch (Exception e) {
+                LOG.error("",e);
                 return false;
             }
         }

@@ -1,21 +1,26 @@
 package ua.com.juja.cmd.controller;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
 public class Configuration {
 
-
-    Properties properties;
+    private final static Properties properties = new Properties();
+    private final static Logger LOG = LogManager.getLogger();
 
     public Configuration() {
-        properties = new Properties();
+        LOG.traceEntry();
         try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("jdbc.properties")) {
             properties.load(inputStream);
         } catch (IOException e) {
+            LOG.error("",e);
             throw new RuntimeException("Can't load jdbc properties file: " + e);
         }
+        LOG.traceExit();
     }
 
     public String getUser() {
