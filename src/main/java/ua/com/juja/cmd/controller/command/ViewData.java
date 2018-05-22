@@ -7,6 +7,9 @@ import ua.com.juja.cmd.view.View;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * Requests data from particular table
+ */
 public class ViewData extends GeneralCommand {
     public final static String COMMAND = "find";
 
