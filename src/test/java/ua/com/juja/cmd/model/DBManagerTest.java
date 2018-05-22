@@ -16,11 +16,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public abstract class DBManagerTest {
     private DBManager dbManager;
-    private Console view;
 
     @BeforeEach
     public void setup() {
         dbManager = getDBManager();
+        Console view = new Console();
         try {
             Configuration configuration = new Configuration();
             String dbName = configuration.getDbName();

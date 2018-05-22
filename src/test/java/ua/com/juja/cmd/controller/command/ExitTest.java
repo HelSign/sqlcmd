@@ -20,9 +20,7 @@ public class ExitTest {
 
     @Test
     public void testExecute() {
-        assertThrows(ExitException.class, () -> {
-            command.execute("exit");
-        });
+        assertThrows(ExitException.class, () -> {command.execute("exit");});
     }
 
     @Test

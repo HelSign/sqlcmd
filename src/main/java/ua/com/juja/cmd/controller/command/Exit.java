@@ -9,7 +9,7 @@ import java.sql.SQLException;
  * Requests to close database connection and application
  */
 public class Exit extends GeneralCommand {
-    public final static String COMMAND = "exit";
+    private final static String COMMAND = "exit";
 
     public Exit(View view, DBManager dbManager) {
         super(view, dbManager);

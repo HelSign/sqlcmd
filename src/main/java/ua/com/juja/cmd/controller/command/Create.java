@@ -5,11 +5,12 @@ import ua.com.juja.cmd.view.View;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
+
 /**
  * Requests to create table
  */
 public class Create extends GeneralCommand {
-    public final static String COMMAND = "create";
+    private final static String COMMAND = "create";
 
     public Create(View view, DBManager dbManager) {
         super(view, dbManager);
@@ -40,18 +41,17 @@ public class Create extends GeneralCommand {
                 columns.add(input[i].trim());
             }
             result = dbManager.createTable(tableName, columns);
-            view.write(String.format("Table '%s' was successfully created", tableName));
+            if (result == -1) {
+                LOG.warn("Table '{}' wasn't created. Please see the reason in logs", tableName);
+                view.write(String.format("Table '%s' wasn't created. Please see the reason in logs", tableName));
+            } else
+                view.write(String.format("Table '%s' was successfully created", tableName));
         } catch (Exception e) {
-            LOG.error("",e);
+            LOG.error("", e);
             view.write(String.format("Table '%s' wasn't created. The reason is: %s", tableName, e.getMessage()));
-        }
-        if (result == -1) {
-            LOG.warn("Table '{}' wasn't created. Please see the reason in logs", tableName);
-            view.write(String.format("Table '%s' wasn't created. Please see the reason in logs", tableName));
         }
         LOG.traceExit();
     }
-
 
 }
 

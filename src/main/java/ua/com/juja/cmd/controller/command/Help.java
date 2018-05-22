@@ -6,7 +6,7 @@ import ua.com.juja.cmd.view.View;
  * Requests to print help information
  */
 public class Help implements Command {
-    private View view;
+    private final View view;
     final static private String COMMAND = "help";
 
     public Help(View view) {

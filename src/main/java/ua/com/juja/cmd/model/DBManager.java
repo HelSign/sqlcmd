@@ -6,7 +6,7 @@ import java.util.Set;
 
 public interface DBManager {
 
-    void makeConnection(String dbName, String user, String password) throws SQLException;
+    void makeConnection(String dbName, String user, String password);
 
     void closeConnection() throws SQLException;
 

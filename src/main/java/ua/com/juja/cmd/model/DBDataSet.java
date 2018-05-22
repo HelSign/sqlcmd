@@ -10,7 +10,7 @@ import java.util.*;
  */
 public class DBDataSet implements DataSet {
     private final static Logger LOG = LogManager.getLogger();
-    private Map<String, Object> data = new LinkedHashMap<>();
+    private final Map<String, Object> data = new LinkedHashMap<>();
 
     /**
      * Adds association of given name and value to the DataSet

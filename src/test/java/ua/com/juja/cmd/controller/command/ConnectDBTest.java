@@ -24,7 +24,7 @@ public class ConnectDBTest {
     }
 
     @Test
-    public void testExecute() throws SQLException {
+    public void testExecute() {
         command.execute("connect|sqlcmd|postgres|postgres");
         verify(dbManager).makeConnection("sqlcmd", "postgres", "postgres");
         verify(view).write("You are connected to your DB now!");

@@ -7,7 +7,7 @@ import ua.com.juja.cmd.view.View;
  * Requests to delete specified table
  */
 public class Drop extends GeneralCommand {
-    public final static String COMMAND = "drop";
+    private final static String COMMAND = "drop";
 
     public Drop(View view, DBManager dbManager) {
         super(view, dbManager);

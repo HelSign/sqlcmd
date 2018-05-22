@@ -8,7 +8,7 @@ import ua.com.juja.cmd.view.View;
  * Requests to insert data into specified table
  */
 public class Insert extends GeneralCommand {
-    public final static String COMMAND = "insert";
+    private final static String COMMAND = "insert";
 
     public Insert(View view, DBManager dbManager) {
         super(view, dbManager);

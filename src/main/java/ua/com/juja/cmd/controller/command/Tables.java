@@ -7,7 +7,7 @@ import ua.com.juja.cmd.view.View;
  * Requests list of tables
  */
 public class Tables extends GeneralCommand {
-    public final static String COMMAND = "tables";
+    private final static String COMMAND = "tables";
 
     public Tables(View view, DBManager dbManager) {
         super(view, dbManager);

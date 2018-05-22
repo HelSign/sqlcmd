@@ -11,7 +11,7 @@ import java.util.List;
  * Requests data from specified table
  */
 public class ViewData extends GeneralCommand {
-    public final static String COMMAND = "find";
+    private final static String COMMAND = "find";
 
     public ViewData(View view, DBManager dbManager) {
         super(view, dbManager);

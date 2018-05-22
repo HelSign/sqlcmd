@@ -7,7 +7,7 @@ import ua.com.juja.cmd.view.View;
  * Requests to clear (truncate) specified table
  */
 public class Clear extends GeneralCommand {
-    public final static String COMMAND = "clear";
+    private final static String COMMAND = "clear";
 
     public Clear(View view, DBManager dbManager) {
         super(view, dbManager);

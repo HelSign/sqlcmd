@@ -10,7 +10,7 @@ import java.sql.SQLException;
  * Requests to update data in table according to specified condition
  */
 public class Update extends GeneralCommand {
-    public final static String COMMAND = "update";
+    private final static String COMMAND = "update";
 
     public Update(View view, DBManager dbManager) {
         super(view, dbManager);

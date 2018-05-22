@@ -18,6 +18,7 @@ public class UnsupportedTest {
     @BeforeEach
     public void setup() {
         view = mock(View.class);
+        dbManager = mock(DBManager.class);
         command = new Unsupported(view, dbManager);
     }
 

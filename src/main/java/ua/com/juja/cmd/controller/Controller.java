@@ -12,8 +12,8 @@ import java.util.ArrayList;
  * The Controller accepts input and converts it into commands to model or view
  */
 public class Controller {
-    private View view;
-    private ArrayList<Command> commands;
+    private final View view;
+    private final ArrayList<Command> commands;
     private final static Logger LOG = LogManager.getLogger();
 
     /**

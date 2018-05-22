@@ -10,9 +10,8 @@ import ua.com.juja.cmd.view.View;
  */
 public abstract class GeneralCommand implements Command {
     final static Logger LOG = LogManager.getLogger();
-    View view;
-    DBManager dbManager;
-    String COMMAND;
+    final View view;
+    final DBManager dbManager;
 
     public GeneralCommand(View view, DBManager dbManager) {
         this.view = view;

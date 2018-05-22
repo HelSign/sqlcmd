@@ -13,10 +13,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 public class ConsoleTest {
-    private Console console = new Console();
+    private final Console console = new Console();
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
-    ByteArrayInputStream inContent;
+    private ByteArrayInputStream inContent;
 
     @BeforeEach
     public void setUpStreams() {

@@ -8,7 +8,7 @@ import ua.com.juja.cmd.view.View;
  * Requests to delete data from specified table according to specified condition
  */
 public class Delete extends GeneralCommand {
-    public final static String COMMAND = "delete";
+    private final static String COMMAND = "delete";
 
     public Delete(View view, DBManager dbManager) {
         super(view, dbManager);
