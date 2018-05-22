@@ -4,6 +4,9 @@ import ua.com.juja.cmd.model.DBDataSet;
 import ua.com.juja.cmd.model.DBManager;
 import ua.com.juja.cmd.view.View;
 
+/**
+ * Requests to insert data into specified table
+ */
 public class Insert extends GeneralCommand {
     public final static String COMMAND = "insert";
 

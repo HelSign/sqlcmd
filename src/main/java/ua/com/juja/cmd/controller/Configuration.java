@@ -16,6 +16,9 @@ public class Configuration {
     private final static Properties properties = new Properties();
     private final static Logger LOG = LogManager.getLogger();
 
+    /**
+     * Constructor loads properties from file
+     */
     public Configuration() {
         LOG.traceEntry();
         try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("jdbc.properties")) {
@@ -51,6 +54,10 @@ public class Configuration {
         return properties.getProperty("database.port");
     }
 
+    /**
+     *
+     * @return String url , example jdbc:postgresql://127.0.0.1:5432/sqlcmd
+     */
     public String getUrl() {
         return getJDBCDriver() + getServer() + ":" + getPort() + "/" + getDbName();
     }

@@ -4,7 +4,9 @@ import ua.com.juja.cmd.model.DBDataSet;
 import ua.com.juja.cmd.model.DBManager;
 import ua.com.juja.cmd.view.View;
 
-
+/**
+ * Requests to delete data from specified table according to specified condition
+ */
 public class Delete extends GeneralCommand {
     public final static String COMMAND = "delete";
 

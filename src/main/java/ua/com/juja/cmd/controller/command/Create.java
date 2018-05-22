@@ -5,7 +5,9 @@ import ua.com.juja.cmd.view.View;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
-
+/**
+ * Requests to create table
+ */
 public class Create extends GeneralCommand {
     public final static String COMMAND = "create";
 

@@ -4,8 +4,12 @@ import ua.com.juja.cmd.model.DBDataSet;
 import ua.com.juja.cmd.model.DBManager;
 import ua.com.juja.cmd.view.View;
 
+import java.sql.SQLException;
 
-public class Update extends GeneralCommand{
+/**
+ * Requests to update data in table according to specified condition
+ */
+public class Update extends GeneralCommand {
     public final static String COMMAND = "update";
 
     public Update(View view, DBManager dbManager) {
@@ -41,12 +45,12 @@ public class Update extends GeneralCommand{
             if (num == -1) {
                 view.write(String.format("Data wasn't updated in table '%s'", tableName));
                 LOG.warn("Data wasn't updated in table '{}'", tableName);
-            }else
+            } else
                 view.write(String.format("%d rows were updated in table '%s'", num, tableName));
-        } catch (Exception e) {
+        } catch (SQLException e) {
             view.write(String.format("Data wasn't updated in table '%s'", tableName));
             view.write(e.getMessage());
-            LOG.error("",e);
+            LOG.error("", e);
         }
         LOG.traceExit();
     }

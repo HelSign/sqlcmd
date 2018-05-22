@@ -3,6 +3,9 @@ package ua.com.juja.cmd.controller.command;
 import ua.com.juja.cmd.model.DBManager;
 import ua.com.juja.cmd.view.View;
 
+/**
+ * Requests to delete specified table
+ */
 public class Drop extends GeneralCommand {
     public final static String COMMAND = "drop";
 
@@ -31,14 +34,14 @@ public class Drop extends GeneralCommand {
         int result = -1;
         try {
             result = dbManager.dropTable(tableName);
-            view.write(String.format("Table '%s' was successfully deleted", tableName));
+            if (result == -1) {
+                LOG.warn("Table '{}' wasn't deleted. Please see the reason in logs", tableName);
+                view.write(String.format("Table '%s' wasn't deleted. Please see the reason in logs", tableName));
+            } else
+                view.write(String.format("Table '%s' was successfully deleted", tableName));
         } catch (Exception e) {
             LOG.error("", e);
             view.write(String.format("Table '%s' wasn't deleted. The reason is: %s", tableName, e.getMessage()));
-        }
-        if (result == -1) {
-            LOG.warn("Table '{}' wasn't deleted. Please see the reason in logs", tableName);
-            view.write(String.format("Table '%s' wasn't deleted. Please see the reason in logs", tableName));
         }
         LOG.traceExit();
     }

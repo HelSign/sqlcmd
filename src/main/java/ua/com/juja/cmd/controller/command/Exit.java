@@ -5,6 +5,9 @@ import ua.com.juja.cmd.view.View;
 
 import java.sql.SQLException;
 
+/**
+ * Requests to close database connection and application
+ */
 public class Exit extends GeneralCommand {
     public final static String COMMAND = "exit";
 

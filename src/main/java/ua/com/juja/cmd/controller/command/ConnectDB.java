@@ -3,7 +3,10 @@ package ua.com.juja.cmd.controller.command;
 import ua.com.juja.cmd.model.DBManager;
 import ua.com.juja.cmd.view.View;
 
-public class ConnectDB extends GeneralCommand {//todo javadocs
+/**
+ * Requests connection to database
+ */
+public class ConnectDB extends GeneralCommand {
     private final static String COMMAND = "connect";
 
     public ConnectDB(View view, DBManager dbManager) {
@@ -41,7 +44,7 @@ public class ConnectDB extends GeneralCommand {//todo javadocs
         } catch (Exception e) {
             view.write("Please enter correct username and password. See detailed error message below\t");
             view.write(e.getMessage());
-            LOG.error("",e);
+            LOG.error("", e);
         }
     }
 }

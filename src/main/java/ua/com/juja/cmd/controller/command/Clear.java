@@ -4,7 +4,7 @@ import ua.com.juja.cmd.model.DBManager;
 import ua.com.juja.cmd.view.View;
 
 /**
- * Clears or truncates table
+ * Requests to clear (truncate) specified table
  */
 public class Clear extends GeneralCommand {
     public final static String COMMAND = "clear";

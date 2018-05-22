@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
- * Requests data from particular table
+ * Requests data from specified table
  */
 public class ViewData extends GeneralCommand {
     public final static String COMMAND = "find";

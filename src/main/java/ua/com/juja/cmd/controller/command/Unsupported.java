@@ -3,6 +3,9 @@ package ua.com.juja.cmd.controller.command;
 import ua.com.juja.cmd.model.DBManager;
 import ua.com.juja.cmd.view.View;
 
+/**
+ * Command for unrecognized input
+ */
 public class Unsupported extends GeneralCommand {
 
     public Unsupported(View view, DBManager dbManager) {

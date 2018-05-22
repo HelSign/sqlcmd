@@ -8,13 +8,23 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-public class TableGenerator {//todo test
+/**
+ * Generates table view for console output
+ */
+public class TableGenerator {
     private static final String SEPARATOR = "|";
     private static final String HSEPARATOR = "+";
     private static final int COLUMN_SIZE = 20;
     private static final String HBORDER = "-";
     private final static Logger LOG = LogManager.getLogger();
 
+    /**
+     * Generates table view for console output
+     *
+     * @param data    List<DataSet> data which needs to be presented in table
+     * @param columns Set<String> of column names for table header
+     * @return String object which contains data in table view
+     */
     public static String table(List<DataSet> data, Set<String> columns) {
         LOG.traceEntry();
         StringBuilder result = new StringBuilder();
@@ -27,8 +37,8 @@ public class TableGenerator {//todo test
             result.append(SEPARATOR);
             List<Object> values = set.getValues();
             for (Object obj : values) {
-                LOG.trace("obj="+obj);
-                result.append(String.format("%-" + COLUMN_SIZE + "s", (obj==null)? " ": obj.toString()));
+                LOG.trace("obj=" + obj);
+                result.append(String.format("%-" + COLUMN_SIZE + "s", (obj == null) ? " " : obj.toString()));
                 result.append(SEPARATOR);
             }
             result.append(System.lineSeparator());

@@ -3,6 +3,9 @@ package ua.com.juja.cmd.controller.command;
 import ua.com.juja.cmd.model.DBManager;
 import ua.com.juja.cmd.view.View;
 
+/**
+ * Requests list of tables
+ */
 public class Tables extends GeneralCommand {
     public final static String COMMAND = "tables";
 

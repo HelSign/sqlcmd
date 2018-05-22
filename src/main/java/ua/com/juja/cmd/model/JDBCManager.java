@@ -10,10 +10,19 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-public class JDBCManager implements DBManager {//todo check where i can use lambda and streams
+/**
+ * Manages data in database
+ */
+public class JDBCManager implements DBManager {
     private Connection connection;
     private final static Logger LOG = LogManager.getLogger();
 
+    /**
+     * Opens connection with specified user name and password
+     * @param dbName
+     * @param user
+     * @param password
+     */
     @Override
     public void makeConnection(String dbName, String user, String password) {
         if (connection != null) {
@@ -29,6 +38,7 @@ public class JDBCManager implements DBManager {//todo check where i can use lamb
         Configuration configuration = new Configuration();
         String url = configuration.getJDBCDriver() +
                 configuration.getServer() + ":" + configuration.getPort() + "/" + dbName;
+        LOG.trace("Trying to connect to DB with url='{}'", url);
         try {
             connection = DriverManager.getConnection(url, user, password);
         } catch (Exception e) {
@@ -39,8 +49,16 @@ public class JDBCManager implements DBManager {//todo check where i can use lamb
         LOG.trace("Connection has been created");
     }
 
+    /**
+     * Creates table with specified name and columns. All columns are varchar(40)
+     * @param name
+     * @param columns
+     * @return 1 if table was created without any exception
+     * @throws SQLException
+     */
     @Override
-    public int createTable(String name, Set<String> columns) {
+    public int createTable(String name, Set<String> columns) throws SQLException {
+        LOG.traceEntry();
         checkIfConnected();
         StringBuilder query = new StringBuilder("CREATE TABLE " + name + " (");
         for (String col : columns) {
@@ -48,15 +66,21 @@ public class JDBCManager implements DBManager {//todo check where i can use lamb
         }
         //to remove last comma sign
         query.replace(query.length() - 1, query.length(), ")");
+        LOG.trace(query);
         try (Statement stmt = connection.createStatement()) {
             stmt.execute(query.toString());
         } catch (SQLException e) {
-            e.printStackTrace();
-            return -1;
+            LOG.error("", e);
+            throw e;
         }
+        LOG.traceExit();
         return 1;
     }
 
+    /**
+     * Closes database conection if it is open
+     * @throws SQLException
+     */
     @Override
     public void closeConnection() throws SQLException {
         if (connection != null) {
@@ -67,14 +91,20 @@ public class JDBCManager implements DBManager {//todo check where i can use lamb
         }
     }
 
+    /**
+     * Inserts data into specified table
+     * @param table String table name
+     * @param data DataSet object with data to be inserted (pairs of column name and value)
+     * @return int number of inserted rows
+     * @throws SQLException
+     */
     @Override
-    public int insertRows(String table, DataSet data) {
+    public int insertRows(String table, DataSet data) throws SQLException {
         LOG.traceEntry();
         checkIfConnected();
         Set<String> columns = data.getNames();
         StringBuilder columnsList = new StringBuilder(" (");
         StringBuilder valuesList = new StringBuilder(" (");
-
         for (String colName : columns) {
             columnsList.append(colName).append(",");
             valuesList.append("'").append(data.get(colName)).append("',");
@@ -89,14 +119,22 @@ public class JDBCManager implements DBManager {//todo check where i can use lamb
             numRows = st.executeUpdate(query);
         } catch (SQLException e) {
             LOG.error("", e);
-            return -1;
+            throw e;
         }
         LOG.traceExit();
         return numRows;
     }
 
+    /**
+     * Updates specified table according to condition
+     * @param table
+     * @param condition as pair of column name and value for part of UPDATE statement WHERE column=value
+     * @param data for update as pairs of column name and value for part of UPDATE statement SET column=value
+     * @return int number of updated rows
+     * @throws SQLException
+     */
     @Override
-    public int updateRows(String table, DataSet condition, DataSet data) {
+    public int updateRows(String table, DataSet condition, DataSet data) throws SQLException {
         LOG.traceEntry();
         checkIfConnected();
         StringBuilder query = new StringBuilder(String.format("UPDATE public.%s SET ", table));
@@ -114,22 +152,28 @@ public class JDBCManager implements DBManager {//todo check where i can use lamb
         try (Statement st = connection.createStatement()) {
             numRows = st.executeUpdate(query.toString());
         } catch (SQLException e) {
-            LOG.error("", e); //todo check if i need to hide exception
-            return -1;
+            LOG.error("", e);
+            throw e;
         }
         LOG.trace(numRows + " rows were updated");
         LOG.traceExit();
         return numRows;
     }
 
+    /**
+     * Deletes rows in specified table
+     * @param table
+     * @param condition as pair of column name and value for part of DELETE statement WHERE column=value
+     * @return number of deleted rows
+     */
     @Override
-    public int deleteRows(String table, DataSet data) {
+    public int deleteRows(String table, DataSet condition) throws SQLException {
         LOG.traceEntry();
         checkIfConnected();
         String query = "DELETE FROM public." + table + " WHERE ";
-        Set<String> columns = data.getNames();
+        Set<String> columns = condition.getNames();
         for (String colName : columns) {
-            query = String.format(query + "%1$s='%2$s'", colName, data.get(colName));
+            query = String.format(query + "%1$s='%2$s'", colName, condition.get(colName));
         }
         LOG.trace(query);
         int numRows = -1;
@@ -137,15 +181,20 @@ public class JDBCManager implements DBManager {//todo check where i can use lamb
             numRows = st.executeUpdate(query);
         } catch (SQLException e) {
             LOG.error("", e);
-            return -1;
+            throw e;
         }
         LOG.trace(numRows + " rows were deleted");
         LOG.traceExit();
         return numRows;
     }
 
+    /**
+     * Clears specified table
+     * @param table
+     * @return 1 if table was truncated
+     */
     @Override
-    public int truncateTable(String table) {
+    public int truncateTable(String table) throws SQLException {
         LOG.traceEntry();
         checkIfConnected();
         String query = "TRUNCATE TABLE public." + table;
@@ -155,14 +204,20 @@ public class JDBCManager implements DBManager {//todo check where i can use lamb
             numRows = st.executeUpdate(query);
         } catch (SQLException e) {
             LOG.error("", e);
-            return -1;
+            throw e;
         }
         LOG.traceExit();
         return numRows;
     }
 
+    /**
+     * Drops specified table
+     * @param table
+     * @return 1 if table was deleted
+     * @throws SQLException
+     */
     @Override
-    public int dropTable(String table) {
+    public int dropTable(String table) throws SQLException {
         LOG.traceEntry();
         checkIfConnected();
         String query = "DROP TABLE public." + table;
@@ -171,12 +226,18 @@ public class JDBCManager implements DBManager {//todo check where i can use lamb
             st.execute(query);
         } catch (SQLException e) {
             LOG.error("", e);
-            return -1;
+            throw e;
         }
         LOG.traceExit();
         return 1;
     }
 
+    /**
+     * Selects data from specified table
+     * @param tableName
+     * @return rows with data
+     * @throws SQLException
+     */
     @Override
     public List<DataSet> getTableData(String tableName) throws SQLException {
         LOG.traceEntry();
@@ -195,7 +256,7 @@ public class JDBCManager implements DBManager {//todo check where i can use lamb
                 }
                 result.add(dataSet);
             }
-        } catch (SQLException e) {//todo check if i need to throw exception
+        } catch (SQLException e) {
             LOG.error("", e);
             throw e;
         }
@@ -203,6 +264,12 @@ public class JDBCManager implements DBManager {//todo check where i can use lamb
         return result;
     }
 
+    /**
+     * Gets list of columns of specified table
+     * @param tableName
+     * @return
+     * @throws SQLException
+     */
     @Override
     public Set<String> getTableColumns(String tableName) throws SQLException {
         LOG.traceEntry();
@@ -227,6 +294,11 @@ public class JDBCManager implements DBManager {//todo check where i can use lamb
         return result;
     }
 
+    /**
+     * Select list of table names
+     * @return
+     * @throws SQLException
+     */
     @Override
     public String getTablesNames() throws SQLException {
         LOG.traceEntry();
