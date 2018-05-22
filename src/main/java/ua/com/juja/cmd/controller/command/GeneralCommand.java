@@ -5,6 +5,9 @@ import org.apache.logging.log4j.Logger;
 import ua.com.juja.cmd.model.DBManager;
 import ua.com.juja.cmd.view.View;
 
+/**
+ * Super class for all commands
+ */
 public abstract class GeneralCommand implements Command {
     final static Logger LOG = LogManager.getLogger();
     View view;

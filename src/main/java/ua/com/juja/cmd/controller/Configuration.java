@@ -7,6 +7,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+/**
+ * Provides such information for access to data base as user name, password , etc
+ * Configuration read file jdbc.properties so it should have correct data
+ */
 public class Configuration {
 
     private final static Properties properties = new Properties();
@@ -17,7 +21,7 @@ public class Configuration {
         try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("jdbc.properties")) {
             properties.load(inputStream);
         } catch (IOException e) {
-            LOG.error("",e);
+            LOG.error("", e);
             throw new RuntimeException("Can't load jdbc properties file: " + e);
         }
         LOG.traceExit();

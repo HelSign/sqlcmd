@@ -1,9 +1,9 @@
 package ua.com.juja.cmd.controller;
 
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ua.com.juja.cmd.model.JDBCManager;
 import ua.com.juja.cmd.view.Console;
-import org.apache.logging.log4j.Logger;
 
 
 public class Main {

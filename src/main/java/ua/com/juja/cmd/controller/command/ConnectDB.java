@@ -1,11 +1,7 @@
 package ua.com.juja.cmd.controller.command;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import ua.com.juja.cmd.model.DBManager;
 import ua.com.juja.cmd.view.View;
-
-import java.util.Arrays;
 
 public class ConnectDB extends GeneralCommand {//todo javadocs
     private final static String COMMAND = "connect";

@@ -9,13 +9,19 @@ import ua.com.juja.cmd.view.View;
 import java.util.ArrayList;
 
 /**
- *
+ * The Controller accepts input and converts it into commands to model or view
  */
 public class Controller {
     private View view;
     private ArrayList<Command> commands;
     private final static Logger LOG = LogManager.getLogger();
 
+    /**
+     * Constructs Contoller who manages specified DBManager and View and uses Command pattern
+     *
+     * @param dbManager DBManager which manages data in database
+     * @param view      Ouput / input object implementing View interface
+     */
     public Controller(DBManager dbManager, View view) {
         this.view = view;
         commands = new ArrayList<Command>();
@@ -33,6 +39,9 @@ public class Controller {
         commands.add(new Unsupported(view, dbManager));
     }
 
+    /**
+     * The main method of Controller which interprets input from View into commands
+     */
     public void run() {
         LOG.traceEntry();
         view.write("Hello! You are using SQLCmd application");

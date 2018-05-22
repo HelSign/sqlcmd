@@ -1,15 +1,11 @@
 package ua.com.juja.cmd.controller.command;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import ua.com.juja.cmd.model.DBManager;
 import ua.com.juja.cmd.view.View;
 
-import java.util.Arrays;
-
-
+/**
+ * Clears or truncates table
+ */
 public class Clear extends GeneralCommand {
     public final static String COMMAND = "clear";
 
